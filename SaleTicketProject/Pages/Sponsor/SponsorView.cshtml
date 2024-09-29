@@ -1,0 +1,430 @@
+﻿@page
+@model SaleTicketProject.Pages.Sponsor.SponsorViewModel
+@{
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="/css/fontawesome.css">
+    <link rel="stylesheet" href="/css/templatemo-villa-agency.css">
+    <link rel="stylesheet" href="/css/owl.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css'>
+    <!--
+
+    TemplateMo 591 villa agency
+
+    https://templatemo.com/tm-591-villa-agency
+
+    -->
+
+    <style>
+        /* Basic styling for the select element */
+        #categories {
+            width: 200px; /* Adjust the width as needed */
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            background-color: #f9f9f9;
+            color: #333;
+            appearance: none; /* Remove default styling for better customization */
+            -webkit-appearance: none; /* For Safari */
+            -moz-appearance: none; /* For Firefox */
+            background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M7 10l5 5 5-5"/></svg>'); /* Custom dropdown arrow */
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+        }
+
+            /* Hover effect for the select element */
+            #categories:hover {
+                border-color: #888;
+            }
+
+            /* Focus effect for the select element */
+            #categories:focus {
+                outline: none;
+                border-color: #555;
+                box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+            }
+
+            /* Styling for the option elements */
+            #categories option {
+                padding: 10px;
+                font-size: 16px;
+                color: #333;
+                background-color: #f9f9f9;
+            }
+
+        /* Optional: Custom font and color for the label */
+        label[for="categories"] {
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .alert {
+            padding: 20px;
+            background-color: #f44336;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+            .alert.success {
+                background-color: #4CAF50;
+            }
+
+            .alert.info {
+                background-color: #2196F3;
+            }
+
+            .alert.warning {
+                background-color: #ff9800;
+            }
+
+        .student-profile .card {
+            border-radius: 10px;
+        }
+
+            .student-profile .card .card-header .profile_img {
+                width: 150px;
+                height: 150px;
+                object-fit: cover;
+                margin: 10px auto;
+                border: 10px solid #ccc;
+                border-radius: 50%;
+            }
+
+            .student-profile .card h3 {
+                font-size: 20px;
+                font-weight: 700;
+            }
+
+            .student-profile .card p {
+                font-size: 16px;
+                color: #000;
+            }
+
+        .student-profile .table th,
+        .student-profile .table td {
+            font-size: 14px;
+            padding: 5px 10px;
+            color: #000;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ***** Preloader Start ***** -->
+    <div id="js-preloader" class="js-preloader">
+        <div class="preloader-inner">
+            <span class="dot"></span>
+            <div class="dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+    <!-- ***** Preloader End ***** -->
+
+    <div class="sub-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-8">
+                    <ul class="info">
+                        <li><i class="fa fa-envelope"></i> CThon@company.com</li>
+                        <li><i class="fa fa-map"></i> Thu Duc District, HCM City, VietNam</li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <ul class="social-links">
+                        <li><a href="#"><i class="fab fa-facebook"></i></a></li>
+                        <li><a href="https://x.com/minthu" target="_blank"><i class="fab fa-twitter"></i></a></li>
+                        <li><a href="#"><i class="fab fa-linkedin"></i></a></li>
+                        <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-heading header-text">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h3>Sponsor View</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="student-profile py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-transparent text-center">
+                            <img class="profile_img" src="https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg" alt="student dp">
+                            <h3>@Model.Account.Name</h3>
+                        </div>
+                        <div class="card-body">
+                            <p class="mb-0"><strong class="pr-1">Account ID:</strong> @Model.Account.Id</p>
+                            <p class="mb-0"><strong class="pr-1">Email:</strong> @Model.Account.Email</p>
+                            <p class="mb-0"><strong class="pr-1">Phone:</strong> @Model.Account.Phone</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-transparent border-0">
+                            <h3 class="mb-0"><i class="far fa-clone pr-1"></i> General Information</h3>
+                        </div>
+                        <div class="card-body pt-0">
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th width="30%">Role</th>
+                                    <td width="2%">:</td>
+                                    <td>@Model.RoleName.Name</td>
+                                </tr>
+                                <tr>
+                                    <th width="30%">Password	</th>
+                                    <td width="2%">:</td>
+                                    <td>@Model.Account.Password</td>
+                                </tr>
+                                <tr>
+                                    <th width="30%">Status</th>
+                                    <td width="2%">:</td>
+                                    <td>@Model.Account.Status</td>
+                                </tr>
+                                @*                                 <tr>
+                                <th width="30%">Religion</th>
+                                <td width="2%">:</td>
+                                <td>Group</td>
+                                </tr>
+                                <tr>
+                                <th width="30%">blood</th>
+                                <td width="2%">:</td>
+                                <td>B+</td>
+                                </tr> *@
+                            </table>
+                        </div>
+                    </div>
+                    <div style="height: 26px"></div>
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-transparent border-0">
+                            <h3 class="mb-0"><i class="far fa-clone pr-1"></i> Notification</h3>
+                        </div>
+                        <div class="card-body pt-0">
+                            <br />
+                            <h3>Notice to Sponsor</h3>
+                            <br />
+                            @if (TempData["Message"] != null)
+                            {
+                                <div class="alert warning">
+                                    @TempData["Message"]
+                                </div>
+                            }
+                            @if (TempData["SuccessMessage"] != null)
+                            {
+                                <div class="alert success">
+                                    @TempData["SuccessMessage"]
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*     @if (TempData["Message"] != null)
+    {
+    <div class="alert warning">
+    @TempData["Message"]
+    </div>
+    }
+    @if (TempData["SuccessMessage"] != null)
+    {
+    <div class="alert success">
+    @TempData["SuccessMessage"]
+    </div>
+    } *@
+
+    <div class="section best-deal">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="section-heading">
+                        <h6>| Event</h6>
+                        <h2>Your Sponsor Event Here!</h2>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="tabs-content">
+                        <div class="row">
+                            <div class="nav-wrapper ">
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="penthouse-tab" data-bs-toggle="tab" data-bs-target="#penthouse" type="button" role="tab" aria-controls="penthouse" aria-selected="false">VIEW</button>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade" id="penthouse" role="tabpanel" aria-labelledby="penthouse-tab">
+                                    <div class="row">
+
+                                        @foreach (var article in Model.Events)
+                                        {
+                                            @if (article.SponsorId == Model.Account.Id)
+                                            {
+                                                <div class="col-lg-12">
+                                                    <div class="info-table">
+                                                        <form method="post">
+                                                            @if (Model.Account != null)
+                                                            {
+                                                                <input type="hidden" asp-for="AccountId" value="@Model.Account.Id" />
+                                                            }
+                                                            <input type="hidden" asp-for="Id" value="@article.Id" />
+                                                            @if (Model.Account != null)
+                                                            {
+                                                                <a asp-page="/Property-details"><img src="@article.Image" alt=""></a>
+                                                            }
+                                                            <br />
+                                                            <br />
+                                                            <br />
+                                                            <br />
+                                                            <br />
+                                                            <ul>
+                                                                <li>Event Name <span>@article.Name</span></li>
+                                                                <li>Ticket Quantity <span>@article.TicketQuantity</span></li>
+                                                                <li>Ticket Price <span>20,000</span></li>
+                                                                <li>Location <span>@article.Location</span></li>
+                                                                <li>Date Start <span>@article.DateStart</span></li>
+                                                                <li>Date End <span>@article.DateEnd</span></li>
+                                                                <li>Category <span>@article.CategoryId</span></li>
+                                                                <li>Service Sponsor <span>@article.ServiceSponsor</span></li>
+                                                            </ul>
+                                                            <div class="icon-button">
+                                                                <button style="color:white; background:none; border:none" asp-page-handler="NotSponsor" type="submit"> <a><i class="fa fa-calendar"></i> Not Agree</a></button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section properties" style="padding-bottom: 100px">
+        <div class="container">
+            <div class="row properties-box">
+                @foreach (var article in Model.Events)
+                {
+                    @if (article.SponsorId == null && article.Status == 1)
+                    {
+                        <div class="col-lg-4 col-md-6 align-self-center mb-30 properties-items col-md-6 adv">
+                            <div class="item">
+                                <form method="post">
+                                    @if (Model.Account != null)
+                                    {
+                                        <input type="hidden" asp-for="AccountId" value="@Model.Account.Id" />
+                                    }
+                                    <input type="hidden" asp-for="Id" value="@article.Id" />
+                                    @if (Model.Account != null)
+                                    {
+                                        <a asp-page="/Property-details"><img src="@article.Image" style="height: 258px" alt=""></a>
+                                    }
+                                    <span class="category">@article.Name</span>
+                                    <h6>@article.TicketQuantity</h6>
+                                    <h4><a asp-page="/Property-details">@article.Location</a></h4>
+                                    <ul>
+                                        <li>Date Start <span>@article.DateStart</span></li>
+                                        <li>Date End <span>@article.DateEnd</span></li>
+                                        <li>Category <span>@article.CategoryId</span></li>
+                                    </ul>
+                                    @*                                 <div >
+                            <a asp-page="/Property-details">Schedule a visit</a>
+                            </div> *@
+                                    @if (Model.Account != null)
+                                    {
+                                        <label for="categories">Sponsor's Service Options:</label>
+                                        <select asp-for="ServiceSponsor" id="categories">
+                                            <option value="Drink">Drink</option>
+                                            <option value="Food">Food</option>
+                                            <option value="Gift">Gift</option>
+                                            <option value="Drink & Food">Drink & Food</option>
+                                            <option value="Drink & Gift">Drink & Gift</option>
+                                            <option value="Food & Gift">Food & Gift</option>
+                                            <option value="Drink & Food & Gift">Drink & Food & Gift</option>
+                                        </select>
+                                        <div class="main-button">
+                                            <button type="submit" asp-page-handler="Sponsor" style="border: none"><a style="color: white">Agree Sponsor</a></button>
+                                        </div>
+                                    }
+                                </form>
+                            </div>
+                        </div>
+                    }
+                }
+
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <ul class="pagination">
+                        <li><a href="#">1</a></li>
+                        <li><a class="is_active" href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">>></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*     <footer>
+    <div class="container">
+    <div class="col-lg-12">
+    <p>
+    Copyright © 2048 Villa Agency Co., Ltd. All rights reserved.
+
+    Design: <a rel="nofollow" href="https://templatemo.com" target="_blank">TemplateMo</a>
+    </p>
+    </div>
+    </div>
+    </footer> *@
+
+    <!-- Scripts -->
+    <!-- Bootstrap core JavaScript -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/isotope.min.js"></script>
+    <script src="/js/owl-carousel.js"></script>
+    <script src="/js/counter.js"></script>
+    <script src="/js/custom.js"></script>
+
+</body>
+</html>
+

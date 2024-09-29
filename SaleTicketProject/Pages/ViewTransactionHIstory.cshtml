@@ -1,0 +1,73 @@
+﻿@page
+@model SaleTicketProject.Pages.ViewTransactionHIstoryModel
+@{
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>View History</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom right, WhiteSmoke, WhiteSmoke);
+            padding: 20px;
+        }
+
+        .container {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .datagrid {
+            margin: 20px auto;
+            width: 80%;
+        }
+
+        .button {
+            padding: 10px 20px;
+            font-size: 14px;
+            background-color: Black;
+            color: White;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>View Transaction History</h1>
+    </div>
+    @if(Model.TransactionHistory.Count != 0)
+    {       
+    <div class="datagrid">
+        <table id="dgData">
+            <thead>
+                <tr>
+                    <th>Event Name</th>
+                    <th>Ticket Quantity</th>
+                    <th>Total Price</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                    <th>Transaction Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var article in Model.TransactionHistory)
+                {
+                    <tr>
+                        <td>@article.EventName</td>
+                        <td>@article.TicketQuantity</td>
+                        <td>@article.TotalPrice</td>
+                        <td>@article.Time</td>
+                        <td>@article.Status</td>
+                        <td>@article.TransactionType</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    }
+</body>
+</html>
