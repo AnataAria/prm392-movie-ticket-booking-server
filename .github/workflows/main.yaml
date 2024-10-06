@@ -1,0 +1,37 @@
+on:
+    push:
+      branches: ["main"]
+jobs:
+    api-build:
+      name: Build source code to Docker image
+      runs-on: ubuntu-22.04 
+      steps:
+        - name: Checkout Develop
+          uses: actions/checkout@v3
+  
+        - name: DockerHub Login
+          uses: docker/login-action@v3.1.0
+          with:
+            username: ${{secrets.DOCKER_USERNAME}}
+            password: ${{secrets.DOCKER_PASSWORD}}
+  
+        - name: Build Image And Push
+          run: docker compose build mtb-api && docker compose push
+    
+    api-deploy:
+      name: Deploy Staging FE Admin To Google Service Server For Testing
+      runs-on: arisa-server
+      needs: api-build
+      steps:
+      - name: Checkout Develop
+        uses: actions/checkout@v3
+      - name: DockerHub Login
+        uses: docker/login-action@v3.1.0
+        with:
+          username: ${{secrets.DOCKER_USERNAME}}
+          password: ${{secrets.DOCKER_PASSWORD}}
+      - name: Stop API
+        run: docker compose -f docker-compose.prod.yaml -p mtp down mtp-api --rmi all
+        continue-on-error: true
+      - name: Deploy API
+        run: docker compose -f docker-compose.prod.yaml -p mtp up -d mtp-api
