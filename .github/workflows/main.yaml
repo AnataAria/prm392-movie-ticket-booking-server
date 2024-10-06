@@ -31,7 +31,7 @@ jobs:
           username: ${{secrets.DOCKER_USERNAME}}
           password: ${{secrets.DOCKER_PASSWORD}}
       - name: Stop API
-        run: docker compose -f docker-compose.prod.yaml -p mtp down mtp-api --rmi all
+        run: docker compose -f docker-compose.prod.yaml -p mtb down mtb-api --rmi all
         continue-on-error: true
       - name: Deploy API
-        run: docker compose -f docker-compose.prod.yaml -p mtp up -d mtp-api
+        run: docker compose -f docker-compose.prod.yaml -p mtb up -d mtb-api
