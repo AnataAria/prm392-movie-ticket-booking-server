@@ -1,14 +1,9 @@
 ﻿using BusinessObjects;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccessLayers
 {
-    public class CategoryRepository : GenericRepository<Category>
+    public class CategoryRepository(Prn221projectContext context) : GenericRepository<Category>(context)
     {
         public async Task<Category?> getByCateName(string name)
         {

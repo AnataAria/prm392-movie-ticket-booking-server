@@ -10,4 +10,9 @@
     <ProjectReference Include="..\DataAccessLayers\DataAccessLayers.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.1.1" />
+  </ItemGroup>
+
 </Project>

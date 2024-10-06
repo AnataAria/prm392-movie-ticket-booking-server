@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayers
 {
-    public class TicketRepository : GenericRepository<Ticket>
+    public class TicketRepository(Prn221projectContext context) : GenericRepository<Ticket>(context)
     {
         public async Task<int> GetRemainingTicketsForEvent(int eventId)
         {

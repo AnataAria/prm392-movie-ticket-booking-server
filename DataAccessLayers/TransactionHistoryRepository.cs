@@ -11,6 +11,10 @@ namespace DataAccessLayers
 {
     public class TransactionHistoryRepository : GenericRepository<TransactionHistory>
     {
+        public TransactionHistoryRepository(Prn221projectContext context) : base(context)
+        {
+        }
+
         public async Task<List<TransactionHistoryDto>> GetAllTransactionHistoryByAccountId(int accountId)
         {
             var transactionHistories =  await _context.SolvedTickets

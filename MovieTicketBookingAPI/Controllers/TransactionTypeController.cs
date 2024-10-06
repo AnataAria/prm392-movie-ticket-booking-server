@@ -6,14 +6,9 @@ namespace MovieTicketBookingAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TransactionTypeController : ControllerBase
+    public class TransactionTypeController(ITransactionTypeService transactionTypeService) : ControllerBase
     {
-        private readonly ITransactionTypeService _transactionTypeService;
-
-        public TransactionTypeController(ITransactionTypeService transactionTypeService)
-        {
-            _transactionTypeService = transactionTypeService;
-        }
+        private readonly ITransactionTypeService _transactionTypeService = transactionTypeService;
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTransactionTypeById(int id)

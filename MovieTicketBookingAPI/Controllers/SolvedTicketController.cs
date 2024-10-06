@@ -7,14 +7,9 @@ namespace MovieTicketBookingAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SolvedTicketController : ControllerBase
+    public class SolvedTicketController(ISolvedTicketService solvedTicketService) : ControllerBase
     {
-        private readonly ISolvedTicketService _solvedTicketService;
-
-        public SolvedTicketController(ISolvedTicketService solvedTicketService)
-        {
-            _solvedTicketService = solvedTicketService;
-        }
+        private readonly ISolvedTicketService _solvedTicketService = solvedTicketService;
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSolvedTicketById(int id)

@@ -11,5 +11,5 @@ public partial class Promotion
 
     public double? Discount { get; set; }
 
-    public virtual ICollection<SolvedTicket> SolvedTickets { get; set; } = new List<SolvedTicket>();
+    public virtual ICollection<SolvedTicket> SolvedTickets { get; set; } = [];
 }

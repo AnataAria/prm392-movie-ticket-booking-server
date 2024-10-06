@@ -1,9 +1,11 @@
 ﻿using DataAccessLayers;
+using DataAccessLayers.UnitOfWork;
 using Services.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,11 +13,12 @@ namespace Services.Service
 {
     public class GenericService<T> : IGenericService<T> where T : class
     {
-        private readonly GenericRepository<T> _genericDAO;
+        protected readonly GenericRepository<T> _genericDAO;
+        protected readonly IUnitOfWork _unitOfWork;
 
-        public GenericService(GenericRepository<T> genericDAO)
-        {
-            _genericDAO = genericDAO;
+        public GenericService (IUnitOfWork unitOfWork) {
+            this._unitOfWork = unitOfWork;
+            _genericDAO = _unitOfWork.GenericRepository<T> ();
         }
 
         public async Task<T?> GetById(int id) { return await _genericDAO.GetByIdAsync(id); }

@@ -43,7 +43,7 @@ public partial class Prn221projectContext : DbContext
     {
         IConfiguration configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", true, true).Build();
+                .AddJsonFile("appsettings.json", false, true).Build();
         return configuration["ConnectionStrings:DB"];
     }
 

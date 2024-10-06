@@ -19,7 +19,7 @@ public partial class Transaction
 
     public virtual SolvedTicket? SolvedTicket { get; set; }
 
-    public virtual ICollection<TransactionHistory> TransactionHistories { get; set; } = new List<TransactionHistory>();
+    public virtual ICollection<TransactionHistory> TransactionHistories { get; set; } = [];
 
     public virtual TransactionType? Type { get; set; }
 }

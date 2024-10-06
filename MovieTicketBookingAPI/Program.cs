@@ -6,6 +6,9 @@ using Services.Service;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using BusinessObjects;
+using System.Data.Common;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +34,10 @@ builder.Services.AddScoped<TransactionTypeRepository>();
 
 //UnitOfWork
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+// Add Db Context
+
+builder.Services.AddDbContext<Prn221projectContext> ();
 
 //Service
 builder.Services.AddScoped<IAccountService, AccountService>();
@@ -70,16 +77,19 @@ builder.Services.AddAuthentication(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+using (var scope = app.Services.CreateScope()) {
+    var context = scope.ServiceProvider.GetRequiredService<Prn221projectContext>();
+    context.Database.Migrate();
+}
 
 app.Run();

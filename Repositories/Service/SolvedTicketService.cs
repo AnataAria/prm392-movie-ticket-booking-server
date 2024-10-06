@@ -12,20 +12,11 @@ using System.Threading.Tasks;
 
 namespace Services.Service
 {
-    public class SolvedTicketService : GenericService<SolvedTicket>, ISolvedTicketService
+    public class SolvedTicketService(IUnitOfWork unitOfWork, IPromotionService promotionRepository, IAccountService accountRepository) : GenericService<SolvedTicket>(unitOfWork), ISolvedTicketService
     {
-        private readonly GenericRepository<SolvedTicket> _solvedTicketDAO;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IPromotionService _promotionRepository;
-        private readonly IAccountService _accountRepository;
-
-        public SolvedTicketService(GenericRepository<SolvedTicket> solvedTicketDAO, IUnitOfWork unitOfWork, IPromotionService promotionRepository, IAccountService accountRepository) : base(solvedTicketDAO)
-        {
-            _solvedTicketDAO = solvedTicketDAO;
-            _unitOfWork = unitOfWork;
-            _promotionRepository = promotionRepository;
-            _accountRepository = accountRepository;
-        }
+        private readonly IPromotionService _promotionRepository = promotionRepository;
+        private readonly IAccountService _accountRepository = accountRepository;
 
         public async Task PurchaseTickets(List<Ticket> tickets, Account account, int quantity)//promotion, quantity of ticket, transaction - transaction hítory
         {
@@ -35,7 +26,7 @@ namespace Services.Service
                 var promotion = new Promotion();
                 promotion = await _promotionRepository.CheckDiscount(quantity);
 
-                var databaseTicket = await _unitOfWork.TicketDAO.GetByIdAsync(ticket.Id);
+                var databaseTicket = await _unitOfWork.TicketRepository.GetByIdAsync(ticket.Id);
                 if (databaseTicket == null) throw new Exception("NOT FOUND!");
                 if (databaseTicket.Quantity > 0)
                 {
@@ -47,7 +38,7 @@ namespace Services.Service
                     databaseTicket.Quantity = databaseTicket.Quantity - quantity;
                     if (databaseTicket.Quantity == 0) databaseTicket.Status = 0;
 
-                    var checkSoldTicket = await _unitOfWork.SolvedTicketDAO.GetAllAsync();
+                    var checkSoldTicket = await _unitOfWork.SolvedTicketRepository.GetAllAsync();
                     var countSoldTicket = checkSoldTicket.Count();
                     var totalPrice = (int?)((double)databaseTicket.Price! * (double)quantity! - (double)databaseTicket.Price * (double)quantity * promotion!.Discount);
                     var solvedTicket = new SolvedTicket
@@ -59,11 +50,11 @@ namespace Services.Service
                         TotalPrice = totalPrice,
                         PromotionId = promotion!.Id,
                     };
-                    var yourSolvedTicket = await _unitOfWork.SolvedTicketDAO.AddAsync(solvedTicket);
-                    await _unitOfWork.TicketDAO.UpdateAsync(databaseTicket);
+                    var yourSolvedTicket = await _unitOfWork.SolvedTicketRepository.AddAsync(solvedTicket);
+                    await _unitOfWork.TicketRepository.UpdateAsync(databaseTicket);
                     await _unitOfWork.SaveChangesAsync();
 
-                    var checkTransaction = await _unitOfWork.TransactionDAO.GetAllAsync();
+                    var checkTransaction = await _unitOfWork.TransactionRepository.GetAllAsync();
                     var countTransaction = checkTransaction.Count();
                     var transaction = new Transaction
                     {
@@ -73,10 +64,10 @@ namespace Services.Service
                         TypeId = 1,
                         Status = "Completed"
                     };
-                    await _unitOfWork.TransactionDAO.AddAsync(transaction);
+                    await _unitOfWork.TransactionRepository.AddAsync(transaction);
                     await _unitOfWork.SaveChangesAsync();
 
-                    var checkTransactionHistory =  await _unitOfWork.TransactionHistoryDAO.GetAllAsync();
+                    var checkTransactionHistory =  await _unitOfWork.TransactionHistoryRepository.GetAllAsync();
                     var countTransactionHistory = checkTransactionHistory.Count();
                     var transactionHistory = new TransactionHistory
                     {
@@ -86,7 +77,7 @@ namespace Services.Service
                         Time = DateOnly.FromDateTime(DateTime.Now),
                         Status = "Completed"
                     };
-                    await _unitOfWork.TransactionHistoryDAO.AddAsync(transactionHistory);
+                    await _unitOfWork.TransactionHistoryRepository.AddAsync(transactionHistory);
                     await _unitOfWork.SaveChangesAsync();
                 }
             }
@@ -94,14 +85,14 @@ namespace Services.Service
 
         public async Task<List<SolvedTicket>> GetSolvedTicketsByAccountId(int accountId)
         {
-            var SolvedTicket = await _unitOfWork.SolvedTicketDAO.FindAsync(a => a.AccountId == accountId);
+            var SolvedTicket = await _unitOfWork.SolvedTicketRepository.FindAsync(a => a.AccountId == accountId);
             return SolvedTicket.ToList();
         }
 
         public async Task<Boolean> CheckSolvedTicket(int ticketId)
         {
-            var checksolvedTicket = await _unitOfWork.SolvedTicketDAO.FindAsync(a => a.TicketId == ticketId);
-            if (checksolvedTicket.IsNullOrEmpty())
+            var checksolvedTicket = await _unitOfWork.SolvedTicketRepository.FindAsync(a => a.TicketId == ticketId);
+            if (checksolvedTicket == null || !checksolvedTicket.Any())
             {
                 return false;
             }
