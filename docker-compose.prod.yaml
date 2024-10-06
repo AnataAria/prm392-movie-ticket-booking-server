@@ -14,3 +14,4 @@ services:
 networks:
   mtb-api-networks:
     name: mtb_api_networks
+    external: true
