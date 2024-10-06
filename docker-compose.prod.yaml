@@ -1,0 +1,16 @@
+services:
+  mtb-api:
+    container_name: mtb_api
+    image: anataarisa/mtb-aspnet:latest
+    networks:
+      lab2-api-networks:
+    ports:
+      - 8080:80
+    environment:
+      - ASPNETCORE_URLS=http://+:80
+      - ASPNETCORE_ENVIRONMENT=Production
+    restart: always
+
+networks:
+  mtb-api-networks:
+    name: mtb_api_networks

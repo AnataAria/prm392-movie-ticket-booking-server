@@ -1,0 +1,7 @@
+services:
+  mtb-api:
+    container_name: mtb_api
+    image: anataarisa/mtb-aspnet:latest
+    build:
+      context: .
+      dockerfile: ./MovieTicketBookingAPI/Dockerfile
