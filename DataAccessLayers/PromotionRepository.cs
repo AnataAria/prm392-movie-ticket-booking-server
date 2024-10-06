@@ -1,13 +1,8 @@
 ﻿using BusinessObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccessLayers
 {
-    public class PromotionRepository : GenericRepository<Promotion>
+    public class PromotionRepository(Prn221projectContext context) : GenericRepository<Promotion>(context)
     {
     }
 }

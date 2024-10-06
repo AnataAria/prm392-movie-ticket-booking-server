@@ -7,14 +7,9 @@ namespace MovieTicketBookingAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PromotionController : ControllerBase
+    public class PromotionController(IPromotionService promotionService) : ControllerBase
     {
-        private readonly IPromotionService _promotionService;
-
-        public PromotionController(IPromotionService promotionService)
-        {
-            _promotionService = promotionService;
-        }
+        private readonly IPromotionService _promotionService = promotionService;
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)

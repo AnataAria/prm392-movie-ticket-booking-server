@@ -17,5 +17,5 @@ public partial class Ticket
 
     public virtual Event? Event { get; set; }
 
-    public virtual ICollection<SolvedTicket> SolvedTickets { get; set; } = new List<SolvedTicket>();
+    public virtual ICollection<SolvedTicket> SolvedTickets { get; set; } = [];
 }

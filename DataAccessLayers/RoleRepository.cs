@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayers
 {
-    public class RoleRepository : GenericRepository<Role>
+    public class RoleRepository(Prn221projectContext context) : GenericRepository<Role>(context)
     {
     }
 }

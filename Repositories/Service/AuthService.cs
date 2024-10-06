@@ -15,18 +15,10 @@ using DataAccessLayers.UnitOfWork;
 
 namespace Services.Service
 {
-    public class AuthService : IAuthService
+    public class AuthService(IConfiguration configuration, IAccountService accountService, IUnitOfWork unitOfWork) : GenericService<Account>(unitOfWork), IAuthService
     {
-        private readonly IConfiguration _configuration;
-        private readonly IAccountService _accountService; // Use AccountService
-        private readonly IUnitOfWork _unitOfWork;
-
-        public AuthService(IConfiguration configuration, IAccountService accountService, IUnitOfWork unitOfWork)
-        {
-            _configuration = configuration;
-            _accountService = accountService;
-            _unitOfWork = unitOfWork;
-        }
+        private readonly IConfiguration _configuration = configuration;
+        private readonly IAccountService _accountService = accountService;
 
         public async Task<AuthResponseDto> Login(LoginDto loginDto)
         {

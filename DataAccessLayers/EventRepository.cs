@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayers
 {
-    public class EventRepository : GenericRepository<Event>
+    public class EventRepository(Prn221projectContext context) : GenericRepository<Event>(context)
     {
         public async Task<IEnumerable<Event>> GetAllInclude()
         {

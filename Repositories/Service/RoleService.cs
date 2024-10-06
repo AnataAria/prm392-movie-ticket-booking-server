@@ -3,19 +3,14 @@ using DataAccessLayers;
 using Services.Interface;
 using System;
 using System.Collections.Generic;
+using DataAccessLayers.UnitOfWork;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Services.Service
 {
-    public class RoleService : GenericService<Role>, IRoleService
+    public class RoleService(IUnitOfWork unitOfWork) : GenericService<Role>(unitOfWork), IRoleService
     {
-        private readonly GenericRepository<Role> _roleDAO;
-
-        public RoleService(GenericRepository<Role> roleDAO) : base(roleDAO)
-        {
-            _roleDAO = roleDAO;
-        }
     }
 }

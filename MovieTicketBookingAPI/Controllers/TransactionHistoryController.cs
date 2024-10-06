@@ -8,14 +8,9 @@ namespace MovieTicketBookingAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TransactionHistoryController : ControllerBase
+    public class TransactionHistoryController(ITransactionHistoryService transactionHistoryService) : ControllerBase
     {
-        private readonly ITransactionHistoryService _transactionHistoryService;
-
-        public TransactionHistoryController(ITransactionHistoryService transactionHistoryService)
-        {
-            _transactionHistoryService = transactionHistoryService;
-        }
+        private readonly ITransactionHistoryService _transactionHistoryService = transactionHistoryService;
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTransactionHistoryById(int id)

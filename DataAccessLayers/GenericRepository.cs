@@ -1,21 +1,12 @@
 ﻿using BusinessObjects;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccessLayers
 {
-    public class GenericRepository<T> where T : class
+    public class GenericRepository<T>(Prn221projectContext context) where T : class
     {
-        protected readonly Prn221projectContext _context;
-        public GenericRepository()
-        {
-            _context = new Prn221projectContext();
-        }
+        protected readonly Prn221projectContext _context = context;
 
         public async Task<T?> GetByIdAsync(int id)
         {

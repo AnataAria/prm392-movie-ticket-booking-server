@@ -31,7 +31,7 @@ public partial class Event
 
     public virtual Account? Sponsor { get; set; }
 
-    public virtual ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
+    public virtual ICollection<Ticket> Tickets { get; set; } = [];
 
-    public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
+    public virtual ICollection<Transaction> Transactions { get; set; } = [];
 }

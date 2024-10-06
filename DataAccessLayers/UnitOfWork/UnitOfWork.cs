@@ -1,158 +1,126 @@
 ﻿using BusinessObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccessLayers.UnitOfWork
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork(Prn221projectContext context) : IUnitOfWork
     {
-        private Prn221projectContext _projectContext;
-        public UnitOfWork()
-        {
-            _projectContext = new Prn221projectContext();
-        }
+        private readonly Prn221projectContext _projectContext = context;
+        private CategoryRepository categoryRepository;
+        private AccountRepository accountRepository;
+        private EventRepository eventRepository;
+        private PromotionRepository promotionRepository;
+        private RoleRepository roleRepository;
+        private SolvedTicketRepository solvedTicketRepository;
 
-        private AccountRepository accountDAO;
-        public AccountRepository AccountDAO
-        {
-            get
-            {
-                if (accountDAO == null)
-                {
-                    accountDAO = new AccountRepository();
-                }
-
-                return accountDAO;
-            }
-        }
-
-        private CategoryRepository categoryDAO;
-        public CategoryRepository CategoryDAO
+        public AccountRepository AccountRepository
         {
             get
             {
-                if (categoryDAO == null)
-                {
-                    categoryDAO = new CategoryRepository();
-                }
-
-                return categoryDAO;
+                accountRepository ??= new AccountRepository(_projectContext);
+                return accountRepository;
             }
         }
 
-        private EventRepository eventDAO;
-        public EventRepository EventDAO
+        
+        public CategoryRepository CategoryRepository
         {
             get
             {
-                if (eventDAO == null)
-                {
-                    eventDAO = new EventRepository();
-                }
+                categoryRepository ??= new CategoryRepository(_projectContext);
 
-                return eventDAO;
+                return categoryRepository;
             }
         }
 
-        private PromotionRepository promotionDAO;
-        public PromotionRepository PromotionDAO
+        
+        public EventRepository EventRepository
         {
             get
             {
-                if (promotionDAO == null)
-                {
-                    promotionDAO = new PromotionRepository();
-                }
-
-                return promotionDAO;
+                eventRepository ??= new EventRepository(_projectContext);
+                return eventRepository;
             }
         }
 
-        private RoleRepository roleDAO;
-        public RoleRepository RoleDAO
+        
+        public PromotionRepository PromotionRepository
         {
             get
             {
-                if (roleDAO == null)
-                {
-                    roleDAO = new RoleRepository();
-                }
+                promotionRepository ??= new PromotionRepository(_projectContext);
 
-                return roleDAO;
+                return promotionRepository;
             }
         }
 
-        private SolvedTicketRepository solvedTicketDAO;
-        public SolvedTicketRepository SolvedTicketDAO
+        
+        public RoleRepository RoleRepository
         {
             get
             {
-                if (solvedTicketDAO == null)
-                {
-                    solvedTicketDAO = new SolvedTicketRepository();
-                }
+                roleRepository ??= new RoleRepository(_projectContext);
 
-                return solvedTicketDAO;
+                return roleRepository;
             }
         }
 
-        private TicketRepository ticketDAO;
-        public TicketRepository TicketDAO
+        
+        public SolvedTicketRepository SolvedTicketRepository
         {
             get
             {
-                if (ticketDAO == null)
-                {
-                    ticketDAO = new TicketRepository();
-                }
+                solvedTicketRepository ??= new SolvedTicketRepository(_projectContext);
 
-                return ticketDAO;
+                return solvedTicketRepository;
             }
         }
 
-        private TransactionRepository transactionDAO;
-        public TransactionRepository TransactionDAO
+        private TicketRepository ticketRepository;
+        public TicketRepository TicketRepository
         {
             get
             {
-                if (transactionDAO == null)
-                {
-                    transactionDAO = new TransactionRepository();
-                }
+                ticketRepository ??= new TicketRepository(_projectContext);
 
-                return transactionDAO;
+                return ticketRepository;
             }
         }
 
-        private TransactionHistoryRepository transactionHistoryDAO;
-        public TransactionHistoryRepository TransactionHistoryDAO
+        private TransactionRepository transactionRepository;
+        public TransactionRepository TransactionRepository
         {
             get
             {
-                if (transactionHistoryDAO == null)
-                {
-                    transactionHistoryDAO = new TransactionHistoryRepository();
-                }
+                transactionRepository ??= new TransactionRepository(_projectContext);
 
-                return transactionHistoryDAO;
+                return transactionRepository;
             }
         }
 
-        private TransactionTypeRepository transactionTypeDAO;
-        public TransactionTypeRepository TransactionTypeDAO
+        private TransactionHistoryRepository transactionHistoryRepository;
+        public TransactionHistoryRepository TransactionHistoryRepository
         {
             get
             {
-                if (transactionTypeDAO == null)
-                {
-                    transactionTypeDAO = new TransactionTypeRepository();
-                }
+                transactionHistoryRepository ??= new TransactionHistoryRepository(_projectContext);
 
-                return transactionTypeDAO;
+                return transactionHistoryRepository;
             }
+        }
+
+        private TransactionTypeRepository transactionTypeRepository;
+        public TransactionTypeRepository TransactionTypeRepository
+        {
+            get
+            {
+                transactionTypeRepository ??= new TransactionTypeRepository(_projectContext);
+
+                return transactionTypeRepository;
+            }
+        }
+
+        public GenericRepository<E> GenericRepository<E> () where E : class {
+            return new GenericRepository<E>(_projectContext);
         }
 
         public async Task SaveChangesAsync()

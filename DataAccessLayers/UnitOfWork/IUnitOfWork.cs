@@ -9,16 +9,17 @@ namespace DataAccessLayers.UnitOfWork
 {
     public interface IUnitOfWork
     {
-        public AccountRepository AccountDAO { get; }
-        public CategoryRepository CategoryDAO { get; }
-        public EventRepository EventDAO { get; }
-        public PromotionRepository PromotionDAO { get; }
-        public RoleRepository RoleDAO { get; }
-        public SolvedTicketRepository SolvedTicketDAO { get; }
-        public TicketRepository TicketDAO { get; }
-        public TransactionRepository TransactionDAO { get; }
-        public TransactionHistoryRepository TransactionHistoryDAO { get; }
-        public TransactionTypeRepository TransactionTypeDAO { get; }
+        public AccountRepository AccountRepository { get; }
+        public CategoryRepository CategoryRepository { get; }
+        public EventRepository EventRepository { get; }
+        public PromotionRepository PromotionRepository { get; }
+        public RoleRepository RoleRepository { get; }
+        public SolvedTicketRepository SolvedTicketRepository { get; }
+        public TicketRepository TicketRepository { get; }
+        public TransactionRepository TransactionRepository { get; }
+        public TransactionHistoryRepository TransactionHistoryRepository { get; }
+        public TransactionTypeRepository TransactionTypeRepository { get; }
+        public GenericRepository<E> GenericRepository<E> () where E : class ;
         Task SaveChangesAsync();
 
     }
