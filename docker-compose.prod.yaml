@@ -3,7 +3,7 @@ services:
     container_name: mtb_api
     image: anataarisa/mtb-aspnet:latest
     networks:
-      lab2-api-networks:
+      mtb-api-networks:
     ports:
       - 8080:80
     environment:
@@ -14,3 +14,4 @@ services:
 networks:
   mtb-api-networks:
     name: mtb_api_networks
+    external: true
