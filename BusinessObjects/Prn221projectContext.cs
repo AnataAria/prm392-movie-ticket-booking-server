@@ -7,13 +7,15 @@ namespace BusinessObjects;
 
 public partial class Prn221projectContext : DbContext
 {
+    private readonly string _connectionString;
     public Prn221projectContext()
     {
     }
 
-    public Prn221projectContext(DbContextOptions<Prn221projectContext> options)
+    public Prn221projectContext(DbContextOptions<Prn221projectContext> options, IConfiguration configuration)
         : base(options)
     {
+        _connectionString = configuration.GetConnectionString("DB");
     }
 
     public virtual DbSet<Account> Accounts { get; set; }
@@ -37,15 +39,7 @@ public partial class Prn221projectContext : DbContext
     public virtual DbSet<TransactionType> TransactionTypes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer(GetConnectionString());
-
-    private string? GetConnectionString()
-    {
-        IConfiguration configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", false, true).Build();
-        return configuration["ConnectionStrings:DB"];
-    }
+        => optionsBuilder.UseSqlServer(_connectionString);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
