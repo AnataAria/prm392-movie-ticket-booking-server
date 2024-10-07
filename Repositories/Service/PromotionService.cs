@@ -11,11 +11,8 @@ using System.Threading.Tasks;
 
 namespace Services.Service
 {
-    public class PromotionService(GenericRepository<Promotion> promotionDAO, IUnitOfWork unitOfWork) : GenericService<Promotion>(unitOfWork), IPromotionService
+    public class PromotionService(IUnitOfWork unitOfWork) : GenericService<Promotion>(unitOfWork), IPromotionService
     {
-        private readonly GenericRepository<Promotion> _promotionDAO = promotionDAO;
-        private readonly IUnitOfWork _unitOfWork;
-
         public async Task<Promotion> CheckDiscount(int? quantity)
         {
             var promotion = new Promotion();

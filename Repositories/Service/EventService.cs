@@ -11,11 +11,8 @@ using System.Threading.Tasks;
 
 namespace Services.Service
 {
-    public class EventService(GenericRepository<Event> eventDAO, IUnitOfWork unitOfWork) : GenericService<Event>(unitOfWork), IEventService
+    public class EventService(IUnitOfWork unitOfWork) : GenericService<Event>(unitOfWork), IEventService
     {
-        private readonly GenericRepository<Event> _eventDAO = eventDAO;
-        private readonly IUnitOfWork _unitOfWork;
-
         public async Task<IEnumerable<Event>> GetAllInclude()
         {
             return await _unitOfWork.EventRepository.GetAllInclude();

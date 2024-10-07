@@ -10,11 +10,8 @@ using System.Threading.Tasks;
 
 namespace Services.Service
 {
-    public class TicketService(GenericRepository<Ticket> ticketDAO, IUnitOfWork unitOfWork) : GenericService<Ticket>(unitOfWork), ITicketService
+    public class TicketService(IUnitOfWork unitOfWork) : GenericService<Ticket>(unitOfWork), ITicketService
     {
-        private readonly GenericRepository<Ticket> _ticketDAO = ticketDAO;
-        private readonly IUnitOfWork _unitOfWork;
-
         public async Task<int?> CountQuantityPeopleJoinEvent(Event eventName)
         {
             var quantity = eventName.TicketQuantity;
