@@ -7,7 +7,9 @@ public partial class Ticket
 {
     public int Id { get; set; }
 
-    public int? EventId { get; set; }
+    public int? MovieID { get; set; }
+    public int SeatID { get; set; }
+    public int ShowtimeID { get; set; }
 
     public int? Price { get; set; }
 
@@ -15,7 +17,10 @@ public partial class Ticket
 
     public int? Quantity { get; set; }
 
-    public virtual Event? Event { get; set; }
+    public virtual Movie? Movie { get; set; }
+    public virtual Seat? Seat { get; set; }
+    public virtual ShowTime? Showtime { get; set; }
+
 
     public virtual ICollection<SolvedTicket> SolvedTickets { get; set; } = [];
 }

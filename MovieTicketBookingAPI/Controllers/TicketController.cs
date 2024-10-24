@@ -34,7 +34,7 @@ namespace MovieTicketBookingAPI.Controllers
         }
 
         [HttpPost("CountPeopleInEvent")]
-        public async Task<IActionResult> CountQuantityPeopleJoinEvent([FromBody] Event eventName)
+        public async Task<IActionResult> CountQuantityPeopleJoinEvent([FromBody] Movie eventName)
         {
             var result = await _ticketService.CountQuantityPeopleJoinEvent(eventName);
             return  Ok(new { remainingTickets = result });
