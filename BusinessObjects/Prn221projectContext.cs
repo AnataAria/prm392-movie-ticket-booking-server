@@ -174,9 +174,11 @@ public partial class Prn221projectContext : DbContext
             .HasForeignKey(e => e.MovieID).HasConstraintName("FK__Ticket__MovieID");
             entity.HasOne(e => e.Seat)
             .WithMany(e => e.Tickets)
+            .OnDelete(DeleteBehavior.Restrict)
             .HasForeignKey(e => e.SeatID).HasConstraintName("FK__Ticket__TicketID");
             entity.HasOne(e => e.Showtime)
             .WithMany(e => e.Tickets)
+            .OnDelete(DeleteBehavior.Restrict)
             .HasForeignKey(e => e.MovieID).HasConstraintName("FK__Ticket__ShowtimeID");
         });
 
@@ -281,7 +283,7 @@ public partial class Prn221projectContext : DbContext
                   .HasForeignKey(e => e.CinemaRoomID).HasConstraintName("FK__Showtime__CinemaRoomID");
 
             entity.HasMany(e => e.Tickets)
-                  .WithOne()
+                  .WithOne(e => e.Showtime)
                   .HasForeignKey(t => t.ShowtimeID);
         });
 
@@ -299,7 +301,7 @@ public partial class Prn221projectContext : DbContext
                   .HasForeignKey(e => e.CinemaRoomId).HasConstraintName("FK__Seat__CinemaRoomID");
 
             entity.HasMany(e => e.Tickets)
-                  .WithOne()
+                  .WithOne(e => e.Seat)
                   .HasForeignKey(t => t.SeatID);
         });
 

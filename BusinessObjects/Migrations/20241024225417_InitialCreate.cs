@@ -192,23 +192,11 @@ namespace BusinessObjects.Migrations
                     ShowtimeID = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<int>(type: "int", nullable: true),
                     Status = table.Column<byte>(type: "tinyint", nullable: true),
-                    Quantity = table.Column<int>(type: "int", nullable: true),
-                    SeatId = table.Column<int>(type: "int", nullable: true),
-                    ShowtimeId = table.Column<int>(type: "int", nullable: true)
+                    Quantity = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK__Ticket__3214EC277FE16B60", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Ticket_Seat_SeatId",
-                        column: x => x.SeatId,
-                        principalTable: "Seat",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Ticket_ShowTime_ShowtimeId",
-                        column: x => x.ShowtimeId,
-                        principalTable: "ShowTime",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK__Ticket__MovieID",
                         column: x => x.MovieID,
@@ -219,13 +207,13 @@ namespace BusinessObjects.Migrations
                         column: x => x.ShowtimeID,
                         principalTable: "ShowTime",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK__Ticket__TicketID",
                         column: x => x.SeatID,
                         principalTable: "Seat",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -363,19 +351,9 @@ namespace BusinessObjects.Migrations
                 column: "MovieID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ticket_SeatId",
-                table: "Ticket",
-                column: "SeatId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Ticket_SeatID",
                 table: "Ticket",
                 column: "SeatID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Ticket_ShowtimeId",
-                table: "Ticket",
-                column: "ShowtimeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Ticket_ShowtimeID",
@@ -425,16 +403,16 @@ namespace BusinessObjects.Migrations
                 name: "Ticket");
 
             migrationBuilder.DropTable(
-                name: "Seat");
-
-            migrationBuilder.DropTable(
                 name: "ShowTime");
 
             migrationBuilder.DropTable(
-                name: "CinemaRoom");
+                name: "Seat");
 
             migrationBuilder.DropTable(
                 name: "Movie");
+
+            migrationBuilder.DropTable(
+                name: "CinemaRoom");
 
             migrationBuilder.DropTable(
                 name: "Account");

@@ -323,15 +323,9 @@ namespace BusinessObjects.Migrations
                         .HasColumnType("int")
                         .HasColumnName("SeatID");
 
-                    b.Property<int?>("SeatId")
-                        .HasColumnType("int");
-
                     b.Property<int>("ShowtimeID")
                         .HasColumnType("int")
                         .HasColumnName("ShowtimeID");
-
-                    b.Property<int?>("ShowtimeId")
-                        .HasColumnType("int");
 
                     b.Property<byte?>("Status")
                         .HasColumnType("tinyint");
@@ -343,11 +337,7 @@ namespace BusinessObjects.Migrations
 
                     b.HasIndex("SeatID");
 
-                    b.HasIndex("SeatId");
-
                     b.HasIndex("ShowtimeID");
-
-                    b.HasIndex("ShowtimeId");
 
                     b.ToTable("Ticket", (string)null);
                 });
@@ -530,27 +520,19 @@ namespace BusinessObjects.Migrations
                         .HasForeignKey("MovieID")
                         .HasConstraintName("FK__Ticket__MovieID");
 
-                    b.HasOne("BusinessObjects.Seat", null)
+                    b.HasOne("BusinessObjects.Seat", "Seat")
                         .WithMany("Tickets")
                         .HasForeignKey("SeatID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("FK__Ticket__TicketID");
 
-                    b.HasOne("BusinessObjects.Seat", "Seat")
-                        .WithMany()
-                        .HasForeignKey("SeatId");
-
-                    b.HasOne("BusinessObjects.ShowTime", null)
+                    b.HasOne("BusinessObjects.ShowTime", "Showtime")
                         .WithMany("Tickets")
                         .HasForeignKey("ShowtimeID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("FK__Ticket__ShowtimeID");
-
-                    b.HasOne("BusinessObjects.ShowTime", "Showtime")
-                        .WithMany()
-                        .HasForeignKey("ShowtimeId");
 
                     b.Navigation("Movie");
 
