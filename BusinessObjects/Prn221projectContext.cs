@@ -269,11 +269,11 @@ public partial class Prn221projectContext : DbContext
 
             entity.HasOne(e => e.Movie)
                   .WithMany()
-                  .HasForeignKey(e => e.MovieID);
+                  .HasForeignKey(e => e.MovieID).HasConstraintName("FK__Showtime__MovieID");
 
             entity.HasOne(e => e.CinemaRoom)
                   .WithMany(c => c.ShowTimes)
-                  .HasForeignKey(e => e.CinemaRoomID);
+                  .HasForeignKey(e => e.CinemaRoomID).HasConstraintName("FK__Showtime__CinemaRoomID");
 
             entity.HasMany(e => e.Tickets)
                   .WithOne()
