@@ -50,7 +50,7 @@ public partial class Prn221projectContext : DbContext
             entity.ToTable("Account");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
                 .HasColumnName("ID");
             entity.Property(e => e.Address)
                 .HasMaxLength(255)
@@ -81,7 +81,7 @@ public partial class Prn221projectContext : DbContext
             entity.ToTable("Category");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
                 .HasColumnName("ID");
             entity.Property(e => e.Type)
                 .HasMaxLength(100)
@@ -138,7 +138,7 @@ public partial class Prn221projectContext : DbContext
             entity.ToTable("Solved_ticket");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
                 .HasColumnName("ID");
             entity.Property(e => e.AccountId).HasColumnName("AccountID");
             entity.Property(e => e.PromotionId).HasColumnName("PromotionID");
@@ -161,6 +161,9 @@ public partial class Prn221projectContext : DbContext
         modelBuilder.Entity<Ticket>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Ticket__3214EC277FE16B60");
+            entity.Property(e => e.Id)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("ID");
             entity.Property(e => e.MovieID).HasColumnName("MovieID");
             entity.Property(e => e.SeatID).HasColumnName("SeatID");
             entity.Property(e => e.ShowtimeID).HasColumnName("ShowtimeID");
@@ -184,7 +187,7 @@ public partial class Prn221projectContext : DbContext
             entity.ToTable("Transaction");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
                 .HasColumnName("ID");
             entity.Property(e => e.SolvedTicketId).HasColumnName("Solved_ticketID");
             entity.Property(e => e.Status)
@@ -231,7 +234,7 @@ public partial class Prn221projectContext : DbContext
             entity.ToTable("Transaction_type");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
                 .HasColumnName("ID");
             entity.Property(e => e.Name)
                 .HasMaxLength(100)
@@ -242,7 +245,9 @@ public partial class Prn221projectContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__CinemaRoom__ID");
             entity.ToTable("CinemaRoom");
-
+            entity.Property(e => e.Id)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("ID");
             entity.Property(e => e.Id).ValueGeneratedOnAdd();
             entity.Property(e => e.RoomName).HasMaxLength(100);
             entity.Property(e => e.Capacity).IsRequired();
@@ -291,7 +296,7 @@ public partial class Prn221projectContext : DbContext
 
             entity.HasOne(e => e.CinemaRoom)
                   .WithMany(c => c.Seats)
-                  .HasForeignKey(e => e.CinemaRoomId).HasConstraintName("");
+                  .HasForeignKey(e => e.CinemaRoomId).HasConstraintName("FK__Seat__CinemaRoomID");
 
             entity.HasMany(e => e.Tickets)
                   .WithOne()
