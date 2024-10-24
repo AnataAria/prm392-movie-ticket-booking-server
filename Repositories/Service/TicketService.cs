@@ -15,7 +15,7 @@ namespace Services.Service
         private readonly GenericRepository<Ticket> _ticketDAO = ticketDAO;
         private readonly IUnitOfWork _unitOfWork;
 
-        public async Task<int?> CountQuantityPeopleJoinEvent(Event eventName)
+        public async Task<int?> CountQuantityPeopleJoinEvent(Movie eventName)
         {
             var quantity = eventName.TicketQuantity;
             var currentTicket = await _unitOfWork.TicketRepository.GetRemainingTicketsForEvent(eventName.Id);

@@ -9,5 +9,5 @@ public partial class Category
 
     public string? Type { get; set; }
 
-    public virtual ICollection<Event> Events { get; set; } = [];
+    public virtual ICollection<Movie> Movies { get; set; } = [];
 }

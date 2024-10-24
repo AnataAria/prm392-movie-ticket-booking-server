@@ -22,7 +22,7 @@ public partial class Prn221projectContext : DbContext
 
     public virtual DbSet<Category> Categories { get; set; }
 
-    public virtual DbSet<Event> Events { get; set; }
+    public virtual DbSet<Movie> Events { get; set; }
 
     public virtual DbSet<Promotion> Promotions { get; set; }
 
@@ -88,55 +88,43 @@ public partial class Prn221projectContext : DbContext
                 .IsUnicode(false);
         });
 
-        modelBuilder.Entity<Event>(entity =>
+        modelBuilder.Entity<Movie>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Event__3214EC276088597E");
 
-            entity.ToTable("Event");
+            entity.ToTable("Movie");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
+            entity.Property(e => e.Id).ValueGeneratedOnAdd()
                 .HasColumnName("ID");
             entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
             entity.Property(e => e.DateEnd).HasColumnName("Date_End");
             entity.Property(e => e.DateStart).HasColumnName("Date_Start");
             entity.Property(e => e.Image).HasMaxLength(255);
-            entity.Property(e => e.Location)
-                .HasMaxLength(255)
-                .IsUnicode(false);
             entity.Property(e => e.Name).HasMaxLength(255);
-            entity.Property(e => e.ServiceSponsor).HasMaxLength(255);
-            entity.Property(e => e.SponsorId).HasColumnName("SponsorID");
-            entity.Property(e => e.TicketQuantity).HasColumnName("Ticket_Quantity");
-
-            entity.HasOne(d => d.Category).WithMany(p => p.Events)
-                .HasForeignKey(d => d.CategoryId)
-                .HasConstraintName("FK__Event__CategoryI__49C3F6B7");
-
-            entity.HasOne(d => d.Sponsor).WithMany(p => p.Events)
-                .HasForeignKey(d => d.SponsorId)
-                .HasConstraintName("FK_Event_SponsorID");
+            entity.HasOne(e => e.Category)
+                  .WithMany(c => c.Movies)
+                  .HasForeignKey(e => e.CategoryId).HasConstraintName("FK__Movie__CategoryID");
         });
 
         modelBuilder.Entity<Promotion>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Promotio__3214EC275B251E3B");
+            entity.HasKey(e => e.Id).HasName("PK__Promotion__ID");
 
             entity.ToTable("Promotion");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
                 .HasColumnName("ID");
         });
 
         modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Role__3214EC276E6B0E00");
+            entity.HasKey(e => e.Id).HasName("PK__Role__ID");
 
             entity.ToTable("Role");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
                 .HasColumnName("ID");
             entity.Property(e => e.Name)
                 .HasMaxLength(100)
@@ -163,27 +151,30 @@ public partial class Prn221projectContext : DbContext
 
             entity.HasOne(d => d.Promotion).WithMany(p => p.SolvedTickets)
                 .HasForeignKey(d => d.PromotionId)
-                .HasConstraintName("FK__Solved_ti__Promo__4BAC3F29");
+                .HasConstraintName("FK__Solved_Ticket__PromotionID");
 
             entity.HasOne(d => d.Ticket).WithMany(p => p.SolvedTickets)
                 .HasForeignKey(d => d.TicketId)
-                .HasConstraintName("FK__Solved_ti__Ticke__4CA06362");
+                .HasConstraintName("FK__Solved_Ticket__TicketID");
         });
 
         modelBuilder.Entity<Ticket>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Ticket__3214EC277FE16B60");
+            entity.Property(e => e.MovieID).HasColumnName("MovieID");
+            entity.Property(e => e.SeatID).HasColumnName("SeatID");
+            entity.Property(e => e.ShowtimeID).HasColumnName("ShowtimeID");
 
             entity.ToTable("Ticket");
-
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
-            entity.Property(e => e.EventId).HasColumnName("EventID");
-
-            entity.HasOne(d => d.Event).WithMany(p => p.Tickets)
-                .HasForeignKey(d => d.EventId)
-                .HasConstraintName("FK__Ticket__EventID__4D94879B");
+            entity.HasOne(e => e.Movie)
+            .WithMany(e => e.Tickets)
+            .HasForeignKey(e => e.MovieID).HasConstraintName("FK__Ticket__MovieID");
+            entity.HasOne(e => e.Seat)
+            .WithMany(e => e.Tickets)
+            .HasForeignKey(e => e.SeatID).HasConstraintName("FK__Ticket__TicketID");
+            entity.HasOne(e => e.Showtime)
+            .WithMany(e => e.Tickets)
+            .HasForeignKey(e => e.MovieID).HasConstraintName("FK__Ticket__ShowtimeID");
         });
 
         modelBuilder.Entity<Transaction>(entity =>
@@ -195,24 +186,23 @@ public partial class Prn221projectContext : DbContext
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("ID");
-            entity.Property(e => e.EventId).HasColumnName("EventID");
             entity.Property(e => e.SolvedTicketId).HasColumnName("Solved_ticketID");
             entity.Property(e => e.Status)
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.TypeId).HasColumnName("TypeID");
-
-            entity.HasOne(d => d.Event).WithMany(p => p.Transactions)
-                .HasForeignKey(d => d.EventId)
-                .HasConstraintName("FK__Transacti__Event__4E88ABD4");
+            entity.Property(e => e.MovieID).HasColumnName("MovieID");
 
             entity.HasOne(d => d.SolvedTicket).WithMany(p => p.Transactions)
                 .HasForeignKey(d => d.SolvedTicketId)
-                .HasConstraintName("FK__Transacti__Solve__4F7CD00D");
+                .HasConstraintName("FK__Transaction__SolvedTicketID");
 
             entity.HasOne(d => d.Type).WithMany(p => p.Transactions)
                 .HasForeignKey(d => d.TypeId)
-                .HasConstraintName("FK__Transacti__TypeI__5070F446");
+                .HasConstraintName("FK__Transaction__TypeID");
+            entity.HasOne(d => d.Movie).WithMany(p => p.Transactions)
+                .HasForeignKey(d => d.MovieID)
+                .HasConstraintName("FK__Transaction_MovieID");
         });
 
         modelBuilder.Entity<TransactionHistory>(entity =>
@@ -222,7 +212,7 @@ public partial class Prn221projectContext : DbContext
             entity.ToTable("Transaction_history");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
                 .HasColumnName("ID");
             entity.Property(e => e.Status)
                 .HasMaxLength(50)
@@ -246,6 +236,66 @@ public partial class Prn221projectContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(100)
                 .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<CinemaRoom>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__CinemaRoom__ID");
+            entity.ToTable("CinemaRoom");
+
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
+            entity.Property(e => e.RoomName).HasMaxLength(100);
+            entity.Property(e => e.Capacity).IsRequired();
+
+            entity.HasMany(e => e.Seats)
+                  .WithOne(e => e.CinemaRoom)
+                  .HasForeignKey(e => e.CinemaRoomId);
+
+            entity.HasMany(e => e.ShowTimes)
+                  .WithOne(e => e.CinemaRoom)
+                  .HasForeignKey(e => e.CinemaRoomID);
+        });
+
+        modelBuilder.Entity<ShowTime>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__ShowTime__ID");
+            entity.ToTable("ShowTime");
+
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+            entity.Property(e => e.CinemaRoomID).HasColumnName("CinemaRoomID");
+
+            entity.Property(e => e.MovieID).HasColumnName("MovieID");
+
+            entity.HasOne(e => e.Movie)
+                  .WithMany()
+                  .HasForeignKey(e => e.MovieID);
+
+            entity.HasOne(e => e.CinemaRoom)
+                  .WithMany(c => c.ShowTimes)
+                  .HasForeignKey(e => e.CinemaRoomID);
+
+            entity.HasMany(e => e.Tickets)
+                  .WithOne()
+                  .HasForeignKey(t => t.ShowtimeID);
+        });
+
+        modelBuilder.Entity<Seat>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Seat__ID");
+            entity.ToTable("Seat");
+
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+            entity.Property(e => e.CinemaRoomId).HasColumnName("CinemaRoomID");
+
+            entity.HasOne(e => e.CinemaRoom)
+                  .WithMany(c => c.Seats)
+                  .HasForeignKey(e => e.CinemaRoomId).HasConstraintName("");
+
+            entity.HasMany(e => e.Tickets)
+                  .WithOne()
+                  .HasForeignKey(t => t.SeatID);
         });
 
         OnModelCreatingPartial(modelBuilder);
