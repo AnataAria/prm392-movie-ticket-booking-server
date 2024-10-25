@@ -205,9 +205,6 @@ public partial class Prn221projectContext : DbContext
             entity.HasOne(d => d.Type).WithMany(p => p.Transactions)
                 .HasForeignKey(d => d.TypeId)
                 .HasConstraintName("FK__Transaction__TypeID");
-            entity.HasOne(d => d.Movie).WithMany(p => p.Transactions)
-                .HasForeignKey(d => d.MovieID)
-                .HasConstraintName("FK__Transaction_MovieID");
         });
 
         modelBuilder.Entity<TransactionHistory>(entity =>

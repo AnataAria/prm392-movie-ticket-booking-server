@@ -15,8 +15,6 @@ public partial class Transaction
 
     public string? Status { get; set; }
 
-    public virtual Movie? Movie { get; set; }
-
     public virtual SolvedTicket? SolvedTicket { get; set; }
 
     public virtual ICollection<TransactionHistory> TransactionHistories { get; set; } = [];

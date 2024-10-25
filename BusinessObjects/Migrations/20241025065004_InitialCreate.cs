@@ -79,6 +79,31 @@ namespace BusinessObjects.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Movie",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    CategoryID = table.Column<int>(type: "int", nullable: true),
+                    Date_Start = table.Column<DateOnly>(type: "date", nullable: true),
+                    Date_End = table.Column<DateOnly>(type: "date", nullable: true),
+                    Image = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    Status = table.Column<byte>(type: "tinyint", nullable: true),
+                    DirectorName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__Event__3214EC276088597E", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK__Movie__CategoryID",
+                        column: x => x.CategoryID,
+                        principalTable: "Category",
+                        principalColumn: "ID");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Seat",
                 columns: table => new
                 {
@@ -120,35 +145,6 @@ namespace BusinessObjects.Migrations
                         name: "FK__Account__RoleID__48CFD27E",
                         column: x => x.RoleID,
                         principalTable: "Role",
-                        principalColumn: "ID");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Movie",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    CategoryID = table.Column<int>(type: "int", nullable: true),
-                    Date_Start = table.Column<DateOnly>(type: "date", nullable: true),
-                    Date_End = table.Column<DateOnly>(type: "date", nullable: true),
-                    Image = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    Status = table.Column<byte>(type: "tinyint", nullable: true),
-                    AccountId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__Event__3214EC276088597E", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Movie_Account_AccountId",
-                        column: x => x.AccountId,
-                        principalTable: "Account",
-                        principalColumn: "ID");
-                    table.ForeignKey(
-                        name: "FK__Movie__CategoryID",
-                        column: x => x.CategoryID,
-                        principalTable: "Category",
                         principalColumn: "ID");
                 });
 
@@ -263,11 +259,6 @@ namespace BusinessObjects.Migrations
                 {
                     table.PrimaryKey("PK__Transact__3214EC27A304AC82", x => x.ID);
                     table.ForeignKey(
-                        name: "FK__Transaction_MovieID",
-                        column: x => x.MovieID,
-                        principalTable: "Movie",
-                        principalColumn: "ID");
-                    table.ForeignKey(
                         name: "FK__Transaction__SolvedTicketID",
                         column: x => x.Solved_ticketID,
                         principalTable: "Solved_ticket",
@@ -304,11 +295,6 @@ namespace BusinessObjects.Migrations
                 name: "IX_Account_RoleID",
                 table: "Account",
                 column: "RoleID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Movie_AccountId",
-                table: "Movie",
-                column: "AccountId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Movie_CategoryID",
@@ -361,11 +347,6 @@ namespace BusinessObjects.Migrations
                 column: "ShowtimeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transaction_MovieID",
-                table: "Transaction",
-                column: "MovieID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Transaction_Solved_ticketID",
                 table: "Transaction",
                 column: "Solved_ticketID");
@@ -403,10 +384,16 @@ namespace BusinessObjects.Migrations
                 name: "Ticket");
 
             migrationBuilder.DropTable(
+                name: "Account");
+
+            migrationBuilder.DropTable(
                 name: "ShowTime");
 
             migrationBuilder.DropTable(
                 name: "Seat");
+
+            migrationBuilder.DropTable(
+                name: "Role");
 
             migrationBuilder.DropTable(
                 name: "Movie");
@@ -415,13 +402,7 @@ namespace BusinessObjects.Migrations
                 name: "CinemaRoom");
 
             migrationBuilder.DropTable(
-                name: "Account");
-
-            migrationBuilder.DropTable(
                 name: "Category");
-
-            migrationBuilder.DropTable(
-                name: "Role");
         }
     }
 }

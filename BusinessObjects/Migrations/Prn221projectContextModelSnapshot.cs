@@ -125,9 +125,6 @@ namespace BusinessObjects.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("AccountId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("CategoryId")
                         .HasColumnType("int")
                         .HasColumnName("CategoryID");
@@ -139,6 +136,12 @@ namespace BusinessObjects.Migrations
                     b.Property<DateOnly?>("DateStart")
                         .HasColumnType("date")
                         .HasColumnName("Date_Start");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DirectorName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Image")
                         .HasMaxLength(255)
@@ -153,8 +156,6 @@ namespace BusinessObjects.Migrations
 
                     b.HasKey("Id")
                         .HasName("PK__Event__3214EC276088597E");
-
-                    b.HasIndex("AccountId");
 
                     b.HasIndex("CategoryId");
 
@@ -371,8 +372,6 @@ namespace BusinessObjects.Migrations
                     b.HasKey("Id")
                         .HasName("PK__Transact__3214EC27A304AC82");
 
-                    b.HasIndex("MovieID");
-
                     b.HasIndex("SolvedTicketId");
 
                     b.HasIndex("TypeId");
@@ -444,10 +443,6 @@ namespace BusinessObjects.Migrations
 
             modelBuilder.Entity("BusinessObjects.Movie", b =>
                 {
-                    b.HasOne("BusinessObjects.Account", null)
-                        .WithMany("Events")
-                        .HasForeignKey("AccountId");
-
                     b.HasOne("BusinessObjects.Category", "Category")
                         .WithMany("Movies")
                         .HasForeignKey("CategoryId")
@@ -543,11 +538,6 @@ namespace BusinessObjects.Migrations
 
             modelBuilder.Entity("BusinessObjects.Transaction", b =>
                 {
-                    b.HasOne("BusinessObjects.Movie", "Movie")
-                        .WithMany("Transactions")
-                        .HasForeignKey("MovieID")
-                        .HasConstraintName("FK__Transaction_MovieID");
-
                     b.HasOne("BusinessObjects.SolvedTicket", "SolvedTicket")
                         .WithMany("Transactions")
                         .HasForeignKey("SolvedTicketId")
@@ -557,8 +547,6 @@ namespace BusinessObjects.Migrations
                         .WithMany("Transactions")
                         .HasForeignKey("TypeId")
                         .HasConstraintName("FK__Transaction__TypeID");
-
-                    b.Navigation("Movie");
 
                     b.Navigation("SolvedTicket");
 
@@ -577,8 +565,6 @@ namespace BusinessObjects.Migrations
 
             modelBuilder.Entity("BusinessObjects.Account", b =>
                 {
-                    b.Navigation("Events");
-
                     b.Navigation("SolvedTickets");
                 });
 
@@ -597,8 +583,6 @@ namespace BusinessObjects.Migrations
             modelBuilder.Entity("BusinessObjects.Movie", b =>
                 {
                     b.Navigation("Tickets");
-
-                    b.Navigation("Transactions");
                 });
 
             modelBuilder.Entity("BusinessObjects.Promotion", b =>

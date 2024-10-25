@@ -18,10 +18,10 @@ public partial class Movie
     public string? Image { get; set; }
 
     public byte? Status { get; set; }
+    public string? DirectorName { get; set; }
+    public string? Description { get; set; }
 
     public virtual Category? Category { get; set; }
 
     public virtual ICollection<Ticket> Tickets { get; set; } = [];
-
-    public virtual ICollection<Transaction> Transactions { get; set; } = [];
 }
