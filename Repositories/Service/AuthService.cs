@@ -81,34 +81,20 @@ namespace Services.Service
 
         private string HashPassword(string password)
         {
-            using var sha256 = SHA256.Create();
-            byte[] hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-            return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
+            return BCrypt.Net.BCrypt.HashPassword(password);
         }
 
         private bool VerifyPassword(string enteredPassword, string storedHash)
         {
-            string hashedPassword = HashPassword(enteredPassword);
-            return hashedPassword.Equals(storedHash);
+            return BCrypt.Net.BCrypt.Verify(enteredPassword, storedHash);
         }
 
         public async Task<Account> GetUserByClaims(ClaimsPrincipal claims)
         {
-            var userId = claims.FindFirst(c => c.Type == "uid")?.Value;
+            var userId = (claims.FindFirst(c => c.Type == "uid")?.Value) ?? throw new Exception("User not found.");
+            var account = await _accountService.GetById(int.Parse(userId));
 
-            if (userId == null)
-            {
-                throw new Exception("User not found.");
-            }
-
-            var account = await _accountService.GetById(int.Parse(userId)); // Assuming GetById returns Account
-
-            if (account == null)
-            {
-                throw new Exception("User not found.");
-            }
-
-            return account;
+            return account ?? throw new Exception("User not found.");
         }
     }
 }
