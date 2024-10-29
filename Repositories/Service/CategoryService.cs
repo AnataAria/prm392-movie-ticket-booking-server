@@ -10,7 +10,7 @@ namespace Services.Service
     {
         public async Task<Category?> getByCateName(string name)
         {
-            return await _unitOfWork.CategoryRepository.getByCateName(name);
+            return await _unitOfWork.CategoryRepository.GetByCateName(name);
         }
     }
 }

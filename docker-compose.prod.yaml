@@ -8,7 +8,11 @@ services:
       - 8080:80
     environment:
       - ASPNETCORE_URLS=http://+:80
-      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DB=Server=${DB_HOST};uid=${DB_USERNAME};pwd=${DB_PASSWORD};database=${DB_NAME};TrustServerCertificate=True
+      - JwtSettings__Key=${JWT_KEY}
+      - JwtSettings__Issuer=${JWT_ISSUER}
+      - JwtSettings__Audience=${JWT_AUDIENCE}
+      - JwtSettings__DurationInDays=7
     restart: always
 
 networks:

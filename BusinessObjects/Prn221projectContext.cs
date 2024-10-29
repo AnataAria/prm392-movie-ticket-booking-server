@@ -8,14 +8,17 @@ namespace BusinessObjects;
 public partial class Prn221projectContext : DbContext
 {
     private readonly string _connectionString;
+    private readonly IConfiguration configuration;
     public Prn221projectContext()
     {
+        _connectionString = "Server=(local);uid=sa;pwd=12345;database=TicketMovieBooking;TrustServerCertificate=True";
     }
 
     public Prn221projectContext(DbContextOptions<Prn221projectContext> options, IConfiguration configuration)
         : base(options)
     {
-        _connectionString = configuration.GetConnectionString("DB");
+        this.configuration = configuration;
+        _connectionString = this.configuration.GetConnectionString("DB") ?? "Server=(local);uid=sa;pwd=12345;database=TicketMovieBooking;TrustServerCertificate=True";
     }
 
     public virtual DbSet<Account> Accounts { get; set; }
@@ -39,7 +42,7 @@ public partial class Prn221projectContext : DbContext
     public virtual DbSet<TransactionType> TransactionTypes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Server=(local);uid=sa;pwd=12345;database=TicketMovieBooking;TrustServerCertificate=True");
+        => optionsBuilder.UseSqlServer(_connectionString);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

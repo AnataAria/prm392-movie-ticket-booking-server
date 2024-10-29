@@ -24,7 +24,7 @@ namespace Services.Service
         {
             var account = await _accountService.GetSystemAccountByEmailAndPassword(loginDto.Email, loginDto.Password);
 
-            if (account == null || !VerifyPassword(loginDto.Password, account.Password))
+            if (account == null || !VerifyPassword(loginDto.Password, account.Password ?? ""))
             {
                 throw new UnauthorizedAccessException("Wrong email or password.");
             }
