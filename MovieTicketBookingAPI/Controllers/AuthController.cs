@@ -16,8 +16,14 @@ namespace MovieTicketBookingAPI.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto loginDto)
         {
-            var response = await _authService.Login(loginDto);
-            return Ok(response);
+            try
+            {
+                var response = await _authService.Login(loginDto);
+                return Ok(response);
+            } catch (Exception ex)
+            {
+                return Unauthorized(ex.Message);
+            }
         }
 
         [HttpPost("register")]
