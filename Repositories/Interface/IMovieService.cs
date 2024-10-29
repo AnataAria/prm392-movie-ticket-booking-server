@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Services.Interface
 {
-    public interface IEventService : IGenericService<Movie>
+    public interface IMovieService : IGenericService<Movie>
     {
-        Task<IEnumerable<Movie>> GetAllInclude();
+        //Task<IEnumerable<Movie>> GetAllInclude();
         Task<IEnumerable<Movie>> GetAllIncludeType();
     }
 }

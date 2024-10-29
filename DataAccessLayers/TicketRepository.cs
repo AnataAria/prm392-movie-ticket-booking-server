@@ -13,11 +13,11 @@ namespace DataAccessLayers
         public async Task<int> GetRemainingTicketsForEvent(int eventId)
         {
             var totalTicketQuantity = await _context.Tickets
-                .Where(t => t.EventId == eventId)
+                .Where(t => t.MovieID == eventId)
                 .SumAsync(t => t.Quantity ?? 0);
 
             var soldTicketQuantity = await _context.SolvedTickets
-                .Where(st => st.Ticket!.EventId == eventId)
+                .Where(st => st.Ticket!.MovieID == eventId)
                 .SumAsync(st => st.Quantity ?? 0);
 
             var remainingTickets = totalTicketQuantity - soldTicketQuantity;

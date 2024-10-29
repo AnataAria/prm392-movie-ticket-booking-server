@@ -10,7 +10,7 @@ namespace Services.Interface
     public interface ITicketService : IGenericService<Ticket>
     {
         Task<int?> CountQuantityPeopleJoinEvent(Movie eventName);
-        Task<List<Ticket>> GetByEventIdAsync(int eventId);
+        Task<List<Ticket>> GetByMovieIdAsync(int eventId);
         Task UpdateNewTicket(Ticket ticket);
     }
 }

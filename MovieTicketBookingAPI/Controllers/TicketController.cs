@@ -29,7 +29,7 @@ namespace MovieTicketBookingAPI.Controllers
         [HttpGet("GetTicketsByEventId/{eventId}")]
         public async Task<IActionResult> GetTicketsByEventId(int eventId)
         {
-            var tickets = await _ticketService.GetByEventIdAsync(eventId);
+            var tickets = await _ticketService.GetByMovieIdAsync(eventId);
             return Ok(tickets);
         }
 

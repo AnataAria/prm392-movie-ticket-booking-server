@@ -22,7 +22,7 @@ namespace DataAccessLayers
                 .SelectMany(st => st.Transactions)
                 .Select(t => new TransactionHistoryDto
                 {
-                    EventName = t.Event.Name,
+                    MovieName = t.SolvedTicket.Ticket.Movie.Name,
                     TicketQuantity = t.SolvedTicket.Quantity,
                     TotalPrice = t.SolvedTicket.TotalPrice,
                     Time = t.TransactionHistories.FirstOrDefault().Time,

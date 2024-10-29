@@ -7,9 +7,9 @@ namespace MovieTicketBookingAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EventController(IEventService eventService) : ControllerBase
+    public class MovieController(IMovieService eventService) : ControllerBase
     {
-        private readonly IEventService _eventService = eventService;
+        private readonly IMovieService _eventService = eventService;
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
@@ -54,12 +54,12 @@ namespace MovieTicketBookingAPI.Controllers
             return NoContent();
         }
 
-        [HttpGet("ListAllInclude")]
-        public async Task<IActionResult> GetAllInclude()
-        {
-            var events = await _eventService.GetAllInclude();
-            return Ok(events);
-        }
+        //[HttpGet("ListAllInclude")]
+        //public async Task<IActionResult> GetAllInclude()
+        //{
+        //    var events = await _eventService.GetAllInclude();
+        //    return Ok(events);
+        //}
 
         [HttpGet("ListAllIncludeType")]
         public async Task<IActionResult> GetAllIncludeType()
