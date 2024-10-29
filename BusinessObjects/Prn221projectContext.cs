@@ -39,7 +39,7 @@ public partial class Prn221projectContext : DbContext
     public virtual DbSet<TransactionType> TransactionTypes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer(_connectionString);
+        => optionsBuilder.UseSqlServer("Server=(local);uid=sa;pwd=12345;database=TicketMovieBooking;TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

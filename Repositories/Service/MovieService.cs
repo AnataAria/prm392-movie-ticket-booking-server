@@ -11,15 +11,15 @@ using System.Threading.Tasks;
 
 namespace Services.Service
 {
-    public class EventService(GenericRepository<Movie> eventDAO, IUnitOfWork unitOfWork) : GenericService<Movie>(unitOfWork), IEventService
+    public class MovieService(GenericRepository<Movie> eventDAO, IUnitOfWork unitOfWork) : GenericService<Movie>(unitOfWork), IMovieService
     {
         private readonly GenericRepository<Movie> _eventDAO = eventDAO;
         private readonly IUnitOfWork _unitOfWork;
 
-        public async Task<IEnumerable<Movie>> GetAllInclude()
-        {
-            return await _unitOfWork.EventRepository.GetAllInclude();
-        }
+        //public async Task<IEnumerable<Movie>> GetAllInclude()
+        //{
+        //    return await _unitOfWork.EventRepository.GetAllInclude();
+        //}
         public async Task<IEnumerable<Movie>> GetAllIncludeType()
         {
             return await _unitOfWork.EventRepository.GetAllIncludeType();

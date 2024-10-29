@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BusinessObjects.Migrations
 {
     [DbContext(typeof(Prn221projectContext))]
-    [Migration("20241025065004_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20241025135309_ticketmovie")]
+    partial class ticketmovie
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
