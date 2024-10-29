@@ -15,14 +15,14 @@ using DataAccessLayers.UnitOfWork;
 
 namespace Services.Service
 {
-    public class AuthService(IConfiguration configuration, IAccountService accountService, IUnitOfWork unitOfWork) : GenericService<Account>(unitOfWork), IAuthService
+    public class AuthService(IConfiguration configuration, IUnitOfWork unitOfWork, IAccountService accountService) : GenericService<Account>(unitOfWork), IAuthService
     {
         private readonly IConfiguration _configuration = configuration;
         private readonly IAccountService _accountService = accountService;
 
         public async Task<AuthResponseDto> Login(LoginDto loginDto)
         {
-            var account = await _accountService.GetSystemAccountByEmailAndPassword(loginDto.Email, loginDto.Password);
+            var account = await _unitOfWork.AccountRepository.GetSystemAccountByAccountEmail(loginDto.Email);
 
             if (account == null || !VerifyPassword(loginDto.Password, account.Password ?? ""))
             {
@@ -35,7 +35,7 @@ namespace Services.Service
 
         public async Task<Account> Register(RegisterDto registerDto)
         {
-            var existingAccount = await _accountService.GetSystemAccountByEmailAndPassword(registerDto.Email, registerDto.Password);
+            var existingAccount = await _unitOfWork.AccountRepository.GetSystemAccountByAccountEmail(registerDto.Email);
 
             if (existingAccount != null)
             {
