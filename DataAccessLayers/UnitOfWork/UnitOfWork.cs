@@ -7,7 +7,7 @@ namespace DataAccessLayers.UnitOfWork
         private readonly Prn221projectContext _projectContext = context;
         private CategoryRepository categoryRepository;
         private AccountRepository accountRepository;
-        private EventRepository eventRepository;
+        private MovieRepository eventRepository;
         private PromotionRepository promotionRepository;
         private RoleRepository roleRepository;
         private SolvedTicketRepository solvedTicketRepository;
@@ -33,11 +33,11 @@ namespace DataAccessLayers.UnitOfWork
         }
 
         
-        public EventRepository EventRepository
+        public MovieRepository EventRepository
         {
             get
             {
-                eventRepository ??= new EventRepository(_projectContext);
+                eventRepository ??= new MovieRepository(_projectContext);
                 return eventRepository;
             }
         }
@@ -116,6 +116,39 @@ namespace DataAccessLayers.UnitOfWork
                 transactionTypeRepository ??= new TransactionTypeRepository(_projectContext);
 
                 return transactionTypeRepository;
+            }
+        }
+
+        private SeatRepository seatRepository;
+        public SeatRepository SeatRepository
+        {
+            get
+            {
+                seatRepository ??= new SeatRepository(_projectContext);
+
+                return seatRepository;
+            }
+        }
+
+        private CinemaRoomRepository cinemaRoomRepository;
+        public CinemaRoomRepository CinemaRoomRepository
+        {
+            get
+            {
+                cinemaRoomRepository ??= new CinemaRoomRepository(_projectContext);
+
+                return cinemaRoomRepository;
+            }
+        }
+
+        private ShowTimeRepository showTimeRepository;
+        public ShowTimeRepository ShowTimeRepository
+        {
+            get
+            {
+                showTimeRepository ??= new ShowTimeRepository(_projectContext);
+
+                return showTimeRepository;
             }
         }
 

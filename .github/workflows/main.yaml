@@ -22,6 +22,14 @@ jobs:
       name: Deploy Staging FE Admin To Google Service Server For Testing
       runs-on: arisa-server
       needs: api-build
+      env:
+        DB_HOST: ${{secrets.DB_HOST}}
+        DB_USERNAME: ${{secrets.DB_USERNAME}}
+        DB_PASSWORD: ${{secrets.DB_PASSWORD}}
+        DB_NAME: ${{secrets.DB_NAME}}
+        JWT_KEY: ${{secrets.JWT_KEY}}
+        JWT_ISSUER: ${{secrets.JWT_ISSUER}}
+        JWT_AUDIENCE: ${{secrets.JWT_AUDIENCE}}
       steps:
       - name: Checkout Develop
         uses: actions/checkout@v3

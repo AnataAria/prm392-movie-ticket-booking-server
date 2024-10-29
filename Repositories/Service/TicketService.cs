@@ -15,16 +15,16 @@ namespace Services.Service
         private readonly GenericRepository<Ticket> _ticketDAO = ticketDAO;
         private readonly IUnitOfWork _unitOfWork;
 
-        public async Task<int?> CountQuantityPeopleJoinEvent(Event eventName)
+        public async Task<int?> CountQuantityPeopleJoinEvent(Movie eventName)
         {
-            var quantity = eventName.TicketQuantity;
+            var totalQuantity = eventName.Tickets.Sum(t => t.Quantity ?? 0);
             var currentTicket = await _unitOfWork.TicketRepository.GetRemainingTicketsForEvent(eventName.Id);
-            return _ = quantity - currentTicket;
+            return totalQuantity - currentTicket;
         }
 
-        public async Task<List<Ticket>> GetByEventIdAsync(int eventId)
+        public async Task<List<Ticket>> GetByMovieIdAsync(int eventId)
         {
-           var tickets =  await _unitOfWork.TicketRepository.FindAsync(a => a.EventId == eventId);
+           var tickets =  await _unitOfWork.TicketRepository.FindAsync(a => a.MovieID == eventId);
             return tickets.ToList();
         }
 

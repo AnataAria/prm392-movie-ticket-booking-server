@@ -29,12 +29,12 @@ namespace MovieTicketBookingAPI.Controllers
         [HttpGet("GetTicketsByEventId/{eventId}")]
         public async Task<IActionResult> GetTicketsByEventId(int eventId)
         {
-            var tickets = await _ticketService.GetByEventIdAsync(eventId);
+            var tickets = await _ticketService.GetByMovieIdAsync(eventId);
             return Ok(tickets);
         }
 
         [HttpPost("CountPeopleInEvent")]
-        public async Task<IActionResult> CountQuantityPeopleJoinEvent([FromBody] Event eventName)
+        public async Task<IActionResult> CountQuantityPeopleJoinEvent([FromBody] Movie eventName)
         {
             var result = await _ticketService.CountQuantityPeopleJoinEvent(eventName);
             return  Ok(new { remainingTickets = result });

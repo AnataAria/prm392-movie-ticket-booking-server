@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BusinessObjects.Migrations
 {
     [DbContext(typeof(Prn221projectContext))]
-    [Migration("20241006164935_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20241025135309_ticketmovie")]
+    partial class ticketmovie
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,8 +28,11 @@ namespace BusinessObjects.Migrations
             modelBuilder.Entity("BusinessObjects.Account", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
                         .HasMaxLength(255)
@@ -77,8 +80,11 @@ namespace BusinessObjects.Migrations
             modelBuilder.Entity("BusinessObjects.Category", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Type")
                         .HasMaxLength(100)
@@ -91,11 +97,36 @@ namespace BusinessObjects.Migrations
                     b.ToTable("Category", (string)null);
                 });
 
-            modelBuilder.Entity("BusinessObjects.Event", b =>
+            modelBuilder.Entity("BusinessObjects.CinemaRoom", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Capacity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RoomName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id")
+                        .HasName("PK__CinemaRoom__ID");
+
+                    b.ToTable("CinemaRoom", (string)null);
+                });
+
+            modelBuilder.Entity("BusinessObjects.Movie", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("CategoryId")
                         .HasColumnType("int")
@@ -109,49 +140,39 @@ namespace BusinessObjects.Migrations
                         .HasColumnType("date")
                         .HasColumnName("Date_Start");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DirectorName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Image")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("Location")
-                        .HasMaxLength(255)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Name")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("ServiceSponsor")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<int?>("SponsorId")
-                        .HasColumnType("int")
-                        .HasColumnName("SponsorID");
-
                     b.Property<byte?>("Status")
                         .HasColumnType("tinyint");
-
-                    b.Property<int?>("TicketQuantity")
-                        .HasColumnType("int")
-                        .HasColumnName("Ticket_Quantity");
 
                     b.HasKey("Id")
                         .HasName("PK__Event__3214EC276088597E");
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("SponsorId");
-
-                    b.ToTable("Event", (string)null);
+                    b.ToTable("Movie", (string)null);
                 });
 
             modelBuilder.Entity("BusinessObjects.Promotion", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("Condition")
                         .HasColumnType("int");
@@ -160,7 +181,7 @@ namespace BusinessObjects.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id")
-                        .HasName("PK__Promotio__3214EC275B251E3B");
+                        .HasName("PK__Promotion__ID");
 
                     b.ToTable("Promotion", (string)null);
                 });
@@ -168,8 +189,11 @@ namespace BusinessObjects.Migrations
             modelBuilder.Entity("BusinessObjects.Role", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .HasMaxLength(100)
@@ -177,16 +201,77 @@ namespace BusinessObjects.Migrations
                         .HasColumnType("varchar(100)");
 
                     b.HasKey("Id")
-                        .HasName("PK__Role__3214EC276E6B0E00");
+                        .HasName("PK__Role__ID");
 
                     b.ToTable("Role", (string)null);
+                });
+
+            modelBuilder.Entity("BusinessObjects.Seat", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CinemaRoomId")
+                        .HasColumnType("int")
+                        .HasColumnName("CinemaRoomID");
+
+                    b.Property<string>("SeatNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id")
+                        .HasName("PK__Seat__ID");
+
+                    b.HasIndex("CinemaRoomId");
+
+                    b.ToTable("Seat", (string)null);
+                });
+
+            modelBuilder.Entity("BusinessObjects.ShowTime", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AvaliableSeats")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CinemaRoomID")
+                        .HasColumnType("int")
+                        .HasColumnName("CinemaRoomID");
+
+                    b.Property<int>("MovieID")
+                        .HasColumnType("int")
+                        .HasColumnName("MovieID");
+
+                    b.Property<DateTime>("ShowDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TicketQuantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id")
+                        .HasName("PK__ShowTime__ID");
+
+                    b.HasIndex("CinemaRoomID");
+
+                    b.HasIndex("MovieID");
+
+                    b.ToTable("ShowTime", (string)null);
                 });
 
             modelBuilder.Entity("BusinessObjects.SolvedTicket", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("AccountId")
                         .HasColumnType("int")
@@ -222,12 +307,15 @@ namespace BusinessObjects.Migrations
             modelBuilder.Entity("BusinessObjects.Ticket", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
 
-                    b.Property<int?>("EventId")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("MovieID")
                         .HasColumnType("int")
-                        .HasColumnName("EventID");
+                        .HasColumnName("MovieID");
 
                     b.Property<int?>("Price")
                         .HasColumnType("int");
@@ -235,13 +323,25 @@ namespace BusinessObjects.Migrations
                     b.Property<int?>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<int>("SeatID")
+                        .HasColumnType("int")
+                        .HasColumnName("SeatID");
+
+                    b.Property<int>("ShowtimeID")
+                        .HasColumnType("int")
+                        .HasColumnName("ShowtimeID");
+
                     b.Property<byte?>("Status")
                         .HasColumnType("tinyint");
 
                     b.HasKey("Id")
                         .HasName("PK__Ticket__3214EC277FE16B60");
 
-                    b.HasIndex("EventId");
+                    b.HasIndex("MovieID");
+
+                    b.HasIndex("SeatID");
+
+                    b.HasIndex("ShowtimeID");
 
                     b.ToTable("Ticket", (string)null);
                 });
@@ -249,12 +349,15 @@ namespace BusinessObjects.Migrations
             modelBuilder.Entity("BusinessObjects.Transaction", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
 
-                    b.Property<int?>("EventId")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("MovieID")
                         .HasColumnType("int")
-                        .HasColumnName("EventID");
+                        .HasColumnName("MovieID");
 
                     b.Property<int?>("SolvedTicketId")
                         .HasColumnType("int")
@@ -272,8 +375,6 @@ namespace BusinessObjects.Migrations
                     b.HasKey("Id")
                         .HasName("PK__Transact__3214EC27A304AC82");
 
-                    b.HasIndex("EventId");
-
                     b.HasIndex("SolvedTicketId");
 
                     b.HasIndex("TypeId");
@@ -284,8 +385,11 @@ namespace BusinessObjects.Migrations
             modelBuilder.Entity("BusinessObjects.TransactionHistory", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("Price")
                         .HasColumnType("int");
@@ -313,8 +417,11 @@ namespace BusinessObjects.Migrations
             modelBuilder.Entity("BusinessObjects.TransactionType", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .HasMaxLength(100)
@@ -337,21 +444,47 @@ namespace BusinessObjects.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("BusinessObjects.Event", b =>
+            modelBuilder.Entity("BusinessObjects.Movie", b =>
                 {
                     b.HasOne("BusinessObjects.Category", "Category")
-                        .WithMany("Events")
+                        .WithMany("Movies")
                         .HasForeignKey("CategoryId")
-                        .HasConstraintName("FK__Event__CategoryI__49C3F6B7");
-
-                    b.HasOne("BusinessObjects.Account", "Sponsor")
-                        .WithMany("Events")
-                        .HasForeignKey("SponsorId")
-                        .HasConstraintName("FK_Event_SponsorID");
+                        .HasConstraintName("FK__Movie__CategoryID");
 
                     b.Navigation("Category");
+                });
 
-                    b.Navigation("Sponsor");
+            modelBuilder.Entity("BusinessObjects.Seat", b =>
+                {
+                    b.HasOne("BusinessObjects.CinemaRoom", "CinemaRoom")
+                        .WithMany("Seats")
+                        .HasForeignKey("CinemaRoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK__Seat__CinemaRoomID");
+
+                    b.Navigation("CinemaRoom");
+                });
+
+            modelBuilder.Entity("BusinessObjects.ShowTime", b =>
+                {
+                    b.HasOne("BusinessObjects.CinemaRoom", "CinemaRoom")
+                        .WithMany("ShowTimes")
+                        .HasForeignKey("CinemaRoomID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK__Showtime__CinemaRoomID");
+
+                    b.HasOne("BusinessObjects.Movie", "Movie")
+                        .WithMany()
+                        .HasForeignKey("MovieID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK__Showtime__MovieID");
+
+                    b.Navigation("CinemaRoom");
+
+                    b.Navigation("Movie");
                 });
 
             modelBuilder.Entity("BusinessObjects.SolvedTicket", b =>
@@ -364,12 +497,12 @@ namespace BusinessObjects.Migrations
                     b.HasOne("BusinessObjects.Promotion", "Promotion")
                         .WithMany("SolvedTickets")
                         .HasForeignKey("PromotionId")
-                        .HasConstraintName("FK__Solved_ti__Promo__4BAC3F29");
+                        .HasConstraintName("FK__Solved_Ticket__PromotionID");
 
                     b.HasOne("BusinessObjects.Ticket", "Ticket")
                         .WithMany("SolvedTickets")
                         .HasForeignKey("TicketId")
-                        .HasConstraintName("FK__Solved_ti__Ticke__4CA06362");
+                        .HasConstraintName("FK__Solved_Ticket__TicketID");
 
                     b.Navigation("Account");
 
@@ -380,32 +513,43 @@ namespace BusinessObjects.Migrations
 
             modelBuilder.Entity("BusinessObjects.Ticket", b =>
                 {
-                    b.HasOne("BusinessObjects.Event", "Event")
+                    b.HasOne("BusinessObjects.Movie", "Movie")
                         .WithMany("Tickets")
-                        .HasForeignKey("EventId")
-                        .HasConstraintName("FK__Ticket__EventID__4D94879B");
+                        .HasForeignKey("MovieID")
+                        .HasConstraintName("FK__Ticket__MovieID");
 
-                    b.Navigation("Event");
+                    b.HasOne("BusinessObjects.Seat", "Seat")
+                        .WithMany("Tickets")
+                        .HasForeignKey("SeatID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK__Ticket__TicketID");
+
+                    b.HasOne("BusinessObjects.ShowTime", "Showtime")
+                        .WithMany("Tickets")
+                        .HasForeignKey("ShowtimeID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK__Ticket__ShowtimeID");
+
+                    b.Navigation("Movie");
+
+                    b.Navigation("Seat");
+
+                    b.Navigation("Showtime");
                 });
 
             modelBuilder.Entity("BusinessObjects.Transaction", b =>
                 {
-                    b.HasOne("BusinessObjects.Event", "Event")
-                        .WithMany("Transactions")
-                        .HasForeignKey("EventId")
-                        .HasConstraintName("FK__Transacti__Event__4E88ABD4");
-
                     b.HasOne("BusinessObjects.SolvedTicket", "SolvedTicket")
                         .WithMany("Transactions")
                         .HasForeignKey("SolvedTicketId")
-                        .HasConstraintName("FK__Transacti__Solve__4F7CD00D");
+                        .HasConstraintName("FK__Transaction__SolvedTicketID");
 
                     b.HasOne("BusinessObjects.TransactionType", "Type")
                         .WithMany("Transactions")
                         .HasForeignKey("TypeId")
-                        .HasConstraintName("FK__Transacti__TypeI__5070F446");
-
-                    b.Navigation("Event");
+                        .HasConstraintName("FK__Transaction__TypeID");
 
                     b.Navigation("SolvedTicket");
 
@@ -424,21 +568,24 @@ namespace BusinessObjects.Migrations
 
             modelBuilder.Entity("BusinessObjects.Account", b =>
                 {
-                    b.Navigation("Events");
-
                     b.Navigation("SolvedTickets");
                 });
 
             modelBuilder.Entity("BusinessObjects.Category", b =>
                 {
-                    b.Navigation("Events");
+                    b.Navigation("Movies");
                 });
 
-            modelBuilder.Entity("BusinessObjects.Event", b =>
+            modelBuilder.Entity("BusinessObjects.CinemaRoom", b =>
+                {
+                    b.Navigation("Seats");
+
+                    b.Navigation("ShowTimes");
+                });
+
+            modelBuilder.Entity("BusinessObjects.Movie", b =>
                 {
                     b.Navigation("Tickets");
-
-                    b.Navigation("Transactions");
                 });
 
             modelBuilder.Entity("BusinessObjects.Promotion", b =>
@@ -449,6 +596,16 @@ namespace BusinessObjects.Migrations
             modelBuilder.Entity("BusinessObjects.Role", b =>
                 {
                     b.Navigation("Accounts");
+                });
+
+            modelBuilder.Entity("BusinessObjects.Seat", b =>
+                {
+                    b.Navigation("Tickets");
+                });
+
+            modelBuilder.Entity("BusinessObjects.ShowTime", b =>
+                {
+                    b.Navigation("Tickets");
                 });
 
             modelBuilder.Entity("BusinessObjects.SolvedTicket", b =>

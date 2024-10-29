@@ -59,7 +59,7 @@ namespace Services.Service
                     var transaction = new Transaction
                     {
                         Id = countTransaction + 1,
-                        EventId = databaseTicket.EventId,
+                        MovieID = databaseTicket.MovieID,
                         SolvedTicketId = yourSolvedTicket.Id,
                         TypeId = 1,
                         Status = "Completed"
