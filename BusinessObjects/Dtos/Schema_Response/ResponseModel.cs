@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace BusinessObjects.Dtos.Schema_Response
 {
-    public class ResponseModel<T>
+    public class ResponseModel<T> where T : class
     {
         [JsonPropertyName("status")]
         public bool Success { get; set; }
 
         [JsonPropertyName("data")]
-        public T Data { get; set; }
+        public T? Data { get; set; }
 
         [JsonPropertyName("error")]
-        public string Error { get; set; }
+        public string? Error { get; set; }
 
         [JsonPropertyName("error-code")]
         public int ErrorCode { get; set; }
