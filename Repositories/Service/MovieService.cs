@@ -6,7 +6,6 @@ namespace Services.Service
 {
     public class MovieService(IUnitOfWork unitOfWork) : GenericService<Movie>(unitOfWork), IMovieService
     {
-
         //public async Task<IEnumerable<Movie>> GetAllInclude()
         //{
         //    return await _unitOfWork.EventRepository.GetAllInclude();

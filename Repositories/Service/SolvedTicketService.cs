@@ -18,70 +18,59 @@ namespace Services.Service
         private readonly IPromotionService _promotionRepository = promotionRepository;
         private readonly IAccountService _accountRepository = accountRepository;
 
-        public async Task PurchaseTickets(List<Ticket> tickets, Account account, int quantity)//promotion, quantity of ticket, transaction - transaction hítory
+        public async Task PurchaseTickets(int showtimeId, List<int> seatIds, Account account)
         {
+            var showtime = await _unitOfWork.ShowTimeRepository.GetByIdAsync(showtimeId) ?? throw new Exception("Showtime not found");
+            var promotion = await _promotionRepository.CheckDiscount(seatIds.Count);
+            double totalTicketPrice = showtime.Tickets
+                .Where(t => seatIds.Contains(t.SeatID) && t.Quantity > 0)
+                .Sum(t => (double)t.Price!);
+            double finalPrice = totalTicketPrice * (1 - (promotion?.Discount ?? 0.0));
 
-            foreach (var ticket in tickets)
+            if (finalPrice > account.Wallet) throw new Exception("Insufficient account balance");
+            await _accountRepository.MinusDebt(seatIds.Count, showtime.Tickets.First().Price, promotion?.Discount ?? 0.0, account);
+
+            var solvedTickets = new List<SolvedTicket>();
+            var transactions = new List<Transaction>();
+            var transactionHistories = new List<TransactionHistory>();
+
+            foreach (var seatId in seatIds)
             {
-                var promotion = new Promotion();
-                promotion = await _promotionRepository.CheckDiscount(quantity);
+                var ticket = showtime.Tickets.FirstOrDefault(t => t.SeatID == seatId && t.Quantity > 0)
+                             ?? throw new Exception($"Ticket for seat {seatId} is unavailable");
+                ticket.Quantity -= 1;
+                if (ticket.Quantity == 0) ticket.Status = 0;
 
-                var databaseTicket = await _unitOfWork.TicketRepository.GetByIdAsync(ticket.Id);
-                if (databaseTicket == null) throw new Exception("NOT FOUND!");
-                if (databaseTicket.Quantity > 0)
+                solvedTickets.Add(new SolvedTicket
                 {
-                    if (ticket.Status == 0) continue;
-                    if ((double)quantity! * (double)databaseTicket.Price! > account.Wallet) throw new Exception("YOUR PRICE IN ACCOUNT NOT ENOUGH");
-                    if ((double)quantity * (double)databaseTicket.Price <= account.Wallet)
-                        await _accountRepository.MinusDebt(quantity, databaseTicket.Price, promotion.Discount, account);
-
-                    databaseTicket.Quantity = databaseTicket.Quantity - quantity;
-                    if (databaseTicket.Quantity == 0) databaseTicket.Status = 0;
-
-                    var checkSoldTicket = await _unitOfWork.SolvedTicketRepository.GetAllAsync();
-                    var countSoldTicket = checkSoldTicket.Count();
-                    var totalPrice = (int?)((double)databaseTicket.Price! * (double)quantity! - (double)databaseTicket.Price * (double)quantity * promotion!.Discount);
-                    var solvedTicket = new SolvedTicket
-                    {
-                        Id = countSoldTicket + 1,
-                        AccountId = account.Id,
-                        TicketId = ticket.Id,
-                        Quantity = quantity,
-                        TotalPrice = totalPrice,
-                        PromotionId = promotion!.Id,
-                    };
-                    var yourSolvedTicket = await _unitOfWork.SolvedTicketRepository.AddAsync(solvedTicket);
-                    await _unitOfWork.TicketRepository.UpdateAsync(databaseTicket);
-                    await _unitOfWork.SaveChangesAsync();
-
-                    var checkTransaction = await _unitOfWork.TransactionRepository.GetAllAsync();
-                    var countTransaction = checkTransaction.Count();
-                    var transaction = new Transaction
-                    {
-                        Id = countTransaction + 1,
-                        MovieID = databaseTicket.MovieID,
-                        SolvedTicketId = yourSolvedTicket.Id,
-                        TypeId = 1,
-                        Status = "Completed"
-                    };
-                    await _unitOfWork.TransactionRepository.AddAsync(transaction);
-                    await _unitOfWork.SaveChangesAsync();
-
-                    var checkTransactionHistory =  await _unitOfWork.TransactionHistoryRepository.GetAllAsync();
-                    var countTransactionHistory = checkTransactionHistory.Count();
-                    var transactionHistory = new TransactionHistory
-                    {
-                        Id = countTransactionHistory + 1,
-                        TransactionId = transaction.Id,
-                        Price = totalPrice,
-                        Time = DateOnly.FromDateTime(DateTime.Now),
-                        Status = "Completed"
-                    };
-                    await _unitOfWork.TransactionHistoryRepository.AddAsync(transactionHistory);
-                    await _unitOfWork.SaveChangesAsync();
-                }
+                    AccountId = account.Id,
+                    TicketId = ticket.Id,
+                    Quantity = 1,
+                    TotalPrice = (int)(ticket.Price * (1 - (promotion?.Discount ?? 0.0))),
+                    PromotionId = promotion?.Id
+                });
+                transactions.Add(new Transaction
+                {
+                    MovieID = showtime.MovieID,
+                    SolvedTicketId = solvedTickets.Last().Id,
+                    TypeId = 1,
+                    Status = "Completed"
+                });
+                transactionHistories.Add(new TransactionHistory
+                {
+                    TransactionId = transactions.Last().Id,
+                    Price = (int)finalPrice,
+                    Time = DateOnly.FromDateTime(DateTime.Now),
+                    Status = "Completed"
+                });
             }
+
+            await _unitOfWork.SolvedTicketRepository.AddRangeAsync(solvedTickets);
+            await _unitOfWork.TransactionRepository.AddRangeAsync(transactions);
+            await _unitOfWork.TransactionHistoryRepository.AddRangeAsync(transactionHistories);
+            await _unitOfWork.SaveChangesAsync();
         }
+
 
         public async Task<List<SolvedTicket>> GetSolvedTicketsByAccountId(int accountId)
         {

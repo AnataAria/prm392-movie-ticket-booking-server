@@ -8,8 +8,8 @@ namespace BusinessObjects.Dtos.SolvedTicket
 {
     public class PurchaseTicketRequestDto
     {
-        public List<Ticket> Tickets { get; set; }
+        public int ShowtimeId { get; set; }
+        public List<int> SeatIds { get; set; }
         public Account Account { get; set; }
-        public int Quantity { get; set; }
     }
 }

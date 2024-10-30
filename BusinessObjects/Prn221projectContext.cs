@@ -40,6 +40,9 @@ public partial class Prn221projectContext : DbContext
     public virtual DbSet<TransactionHistory> TransactionHistories { get; set; }
 
     public virtual DbSet<TransactionType> TransactionTypes { get; set; }
+    public virtual DbSet<ShowTime> ShowTimes { get; set; }
+    public virtual DbSet<Seat> Seats { get; set; }
+    public virtual DbSet<CinemaRoom> CinemaRooms { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer(_connectionString);

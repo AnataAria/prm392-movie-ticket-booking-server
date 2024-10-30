@@ -11,5 +11,8 @@ namespace Services.Service
 {
     public class SeatService(IUnitOfWork unitOfWork) : GenericService<Seat>(unitOfWork), ISeatService
     {
+        private readonly IUnitOfWork _unitOfWork;
+
+        public async Task<IEnumerable<Seat>> GetAvailableSeatsByShowtimeId(int showtimeId) => await _unitOfWork.SeatRepository.GetAvailableSeatsByShowtimeId(showtimeId);
     }
 }
