@@ -1,4 +1,5 @@
 ﻿using BusinessObjects;
+using BusinessObjects.Dtos.Seat;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace DataAccessLayers
 {
     public class SeatRepository(Prn221projectContext context) : GenericRepository<Seat>(context)
     {
-        public async Task<IEnumerable<Seat>> GetAvailableSeatsByShowtimeId(int showtimeId)
+        public async Task<IEnumerable<SeatDto>> GetAvailableSeatsByShowtimeId(int showtimeId, int movieId)
         {
             var showtime = await _context.ShowTimes
                 .Include(st => st.CinemaRoom)
@@ -18,12 +19,23 @@ namespace DataAccessLayers
                 .FirstOrDefaultAsync(st => st.Id == showtimeId);
 
             if (showtime == null || showtime.CinemaRoom == null)
-                throw new Exception("Showtime or associated Cinema Room not found");
+                return null;
+
+            var bookedSeats = await _context.Tickets
+                .Where(ticket => ticket.ShowtimeID == showtimeId && ticket.MovieID == movieId)
+                .Select(ticket => ticket.SeatID)
+                .ToListAsync();
 
             var availableSeats = showtime.CinemaRoom.Seats
-                .Where(seat => seat.Tickets.All(ticket => ticket.ShowtimeID != showtimeId));
+                .Where(seat => !bookedSeats.Contains(seat.Id))
+                .Select(seat => new SeatDto
+                {
+                    Id = seat.Id,
+                    SeatNumber = seat.SeatNumber,
+                    CinemaRoomName = showtime.CinemaRoom.RoomName
+                });
 
-            return availableSeats;
+            return availableSeats.ToList();
         }
     }
 }
