@@ -9,5 +9,6 @@ namespace Services.Interface
 {
     public interface ISeatService : IGenericService<Seat>
     {
+        Task<IEnumerable<Seat>> GetAvailableSeatsByShowtimeId(int showtimeId);
     }
 }

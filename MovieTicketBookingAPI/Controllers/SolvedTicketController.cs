@@ -58,7 +58,7 @@ namespace MovieTicketBookingAPI.Controllers
         [HttpPost("PurchaseTickets")]
         public async Task<IActionResult> PurchaseTickets([FromBody] PurchaseTicketRequestDto request)
         {
-            await _solvedTicketService.PurchaseTickets(request.Tickets, request.Account, request.Quantity);
+            await _solvedTicketService.PurchaseTickets(request.ShowtimeId, request.SeatIds, request.Account);
             return Ok();
         }
 

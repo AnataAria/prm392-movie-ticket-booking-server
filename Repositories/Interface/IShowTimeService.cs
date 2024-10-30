@@ -9,5 +9,6 @@ namespace Services.Interface
 {
     public interface IShowTimeService : IGenericService<ShowTime>
     {
+        Task<IEnumerable<ShowTime>> GetShowtimesByMovieId(int movieId);
     }
 }

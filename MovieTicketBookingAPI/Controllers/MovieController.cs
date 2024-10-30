@@ -7,14 +7,14 @@ namespace MovieTicketBookingAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MovieController(IMovieService eventService) : ControllerBase
+    public class MovieController(IMovieService movieService) : ControllerBase
     {
-        private readonly IMovieService _eventService = eventService;
+        private readonly IMovieService _movieService = movieService;
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var eventObj = await _eventService.GetById(id);
+            var eventObj = await _movieService.GetById(id);
             if (eventObj == null) return NotFound();
             return Ok(eventObj);
         }
@@ -22,35 +22,35 @@ namespace MovieTicketBookingAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var events = await _eventService.GetAll();
+            var events = await _movieService.GetAll();
             return Ok(events);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Movie eventObj)
         {
-            var createdEvent = await _eventService.Add(eventObj);
+            var createdEvent = await _movieService.Add(eventObj);
             return CreatedAtAction(nameof(GetById), new { id = createdEvent.Id }, createdEvent);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] Movie eventObj)
         {
-            var existingEvent = await _eventService.GetById(id);
+            var existingEvent = await _movieService.GetById(id);
             if (existingEvent == null) return NotFound();
 
             eventObj.Id = id;
-            await _eventService.Update(eventObj);
+            await _movieService.Update(eventObj);
             return NoContent();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var existingEvent = await _eventService.GetById(id);
+            var existingEvent = await _movieService.GetById(id);
             if (existingEvent == null) return NotFound();
 
-            await _eventService.Delete(id);
+            await _movieService.Delete(id);
             return NoContent();
         }
 
@@ -64,7 +64,7 @@ namespace MovieTicketBookingAPI.Controllers
         [HttpGet("ListAllIncludeType")]
         public async Task<IActionResult> GetAllIncludeType()
         {
-            var events = await _eventService.GetAllIncludeType();
+            var events = await _movieService.GetAllIncludeType();
             return Ok(events);
         }
     }

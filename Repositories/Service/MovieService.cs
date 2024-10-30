@@ -13,7 +13,6 @@ namespace Services.Service
 {
     public class MovieService(GenericRepository<Movie> eventDAO, IUnitOfWork unitOfWork) : GenericService<Movie>(unitOfWork), IMovieService
     {
-        private readonly GenericRepository<Movie> _eventDAO = eventDAO;
         private readonly IUnitOfWork _unitOfWork;
 
         //public async Task<IEnumerable<Movie>> GetAllInclude()
