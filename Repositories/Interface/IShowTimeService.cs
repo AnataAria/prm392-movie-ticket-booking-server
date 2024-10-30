@@ -1,4 +1,5 @@
 ﻿using BusinessObjects;
+using BusinessObjects.Dtos.ShowTime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace Services.Interface
 {
     public interface IShowTimeService : IGenericService<ShowTime>
     {
-        Task<IEnumerable<ShowTime>> GetShowtimesByMovieId(int movieId);
+        Task<List<ShowtimeDto>> GetShowtimesByMovieId(int movieId);
     }
 }

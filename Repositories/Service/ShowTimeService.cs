@@ -1,4 +1,5 @@
 ﻿using BusinessObjects;
+using BusinessObjects.Dtos.ShowTime;
 using DataAccessLayers.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using Services.Interface;
@@ -12,9 +13,16 @@ namespace Services.Service
 {
     public class ShowTimeService(IUnitOfWork unitOfWork) : GenericService<ShowTime>(unitOfWork), IShowTimeService
     {
-        private readonly IUnitOfWork _unitOfWork;
 
-        public async Task<IEnumerable<ShowTime>> GetShowtimesByMovieId(int movieId) => await _unitOfWork.ShowTimeRepository.GetShowtimesByMovieId(movieId);
+        public async Task<List<ShowtimeDto>> GetShowtimesByMovieId(int movieId)
+        {
+            if (_unitOfWork.ShowTimeRepository == null)
+            {
+                throw new InvalidOperationException("ShowTimeRepository is not initialized.");
+            }
+
+            return await _unitOfWork.ShowTimeRepository.GetShowtimesByMovieId(movieId);
+        }
 
     }
 }
