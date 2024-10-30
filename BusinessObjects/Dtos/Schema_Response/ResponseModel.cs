@@ -18,7 +18,7 @@ namespace BusinessObjects.Dtos.Schema_Response
         [JsonPropertyName("error")]
         public string? Error { get; set; }
 
-        [JsonPropertyName("error-code")]
+        [JsonPropertyName("errorCode")]
         public int ErrorCode { get; set; }
 
         public ResponseModel() => Success = true;
