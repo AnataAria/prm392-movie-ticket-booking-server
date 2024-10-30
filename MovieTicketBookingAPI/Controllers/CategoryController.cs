@@ -1,4 +1,5 @@
 ﻿using BusinessObjects;
+using BusinessObjects.Dtos.Schema_Response;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interface;
 using Services.Service;
@@ -12,18 +13,54 @@ namespace MovieTicketBookingAPI.Controllers
         private readonly ICategoryService _categoryService = categoryService;
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<ActionResult<ResponseModel<Category>>> GetById(int id)
         {
-            var category = await _categoryService.GetById(id);
-            if (category == null) return NotFound();
-            return Ok(category);
+            try {
+                var category = await _categoryService.GetById(id);
+                if (category == null) return NotFound(new ResponseModel<Category>() {
+                    Data = null,
+                    Error = $"Not found category with id {id}",
+                    Success = false,
+                    ErrorCode = 404
+                });
+                return Ok(new ResponseModel<Category>() {
+                    Data = category,
+                    Error = null,
+                    Success = true,
+                    ErrorCode = 200
+                });
+            } catch (Exception ex) {
+                return StatusCode(500, new ResponseModel<Category>() {
+                    Data = null,
+                    Error = ex.Message,
+                    Success = false,
+                    ErrorCode = 500
+                });
+            }
+            
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<ActionResult<ResponseModel<IEnumerable<Category>>>> GetAll()
         {
-            var categories = await _categoryService.GetAll();
-            return Ok(categories);
+            try {
+                var categories = await _categoryService.GetAll();
+                return Ok(new ResponseModel<IEnumerable<Category>>() {
+                    Data = categories,
+                    Error = null,
+                    Success = true,
+                    ErrorCode = 200
+                });
+            } catch(Exception ex) {
+                return StatusCode(500, new ResponseModel<IEnumerable<Category>>() {
+                    Data = null,
+                    Error = ex.Message,
+                    Success = false,
+                    ErrorCode = 500
+                });
+            }
+            
+            
         }
 
         [HttpPost]

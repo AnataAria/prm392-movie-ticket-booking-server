@@ -12,14 +12,11 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//Repository
 builder.Services.AddScoped<AccountRepository>();
 builder.Services.AddScoped<CategoryRepository>();
 builder.Services.AddScoped<MovieRepository>();
@@ -38,11 +35,9 @@ builder.Services.AddScoped<CinemaRoomRepository>();
 //UnitOfWork
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-// Add Db Context
 
 builder.Services.AddDbContext<Prn221projectContext> ();
 
-//Service
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IMovieService, MovieService>();
@@ -82,7 +77,6 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 app.UseSwagger();
 app.UseSwaggerUI();
 

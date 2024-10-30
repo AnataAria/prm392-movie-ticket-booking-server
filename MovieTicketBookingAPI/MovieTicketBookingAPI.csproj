@@ -29,14 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="appsettings.Production.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Repositories\Services.csproj" />
   </ItemGroup>
 

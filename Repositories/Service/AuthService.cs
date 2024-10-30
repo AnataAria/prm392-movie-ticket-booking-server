@@ -15,16 +15,16 @@ using DataAccessLayers.UnitOfWork;
 
 namespace Services.Service
 {
-    public class AuthService(IConfiguration configuration, IAccountService accountService, IUnitOfWork unitOfWork) : GenericService<Account>(unitOfWork), IAuthService
+    public class AuthService(IConfiguration configuration, IUnitOfWork unitOfWork, IAccountService accountService) : GenericService<Account>(unitOfWork), IAuthService
     {
         private readonly IConfiguration _configuration = configuration;
         private readonly IAccountService _accountService = accountService;
 
         public async Task<AuthResponseDto> Login(LoginDto loginDto)
         {
-            var account = await _accountService.GetSystemAccountByEmailAndPassword(loginDto.Email, loginDto.Password);
+            var account = await _unitOfWork.AccountRepository.GetSystemAccountByAccountEmail(loginDto.Email);
 
-            if (account == null || !VerifyPassword(loginDto.Password, account.Password))
+            if (account == null || !VerifyPassword(loginDto.Password, account.Password ?? ""))
             {
                 throw new UnauthorizedAccessException("Wrong email or password.");
             }
@@ -35,7 +35,7 @@ namespace Services.Service
 
         public async Task<Account> Register(RegisterDto registerDto)
         {
-            var existingAccount = await _accountService.GetSystemAccountByEmailAndPassword(registerDto.Email, registerDto.Password);
+            var existingAccount = await _unitOfWork.AccountRepository.GetSystemAccountByAccountEmail(registerDto.Email);
 
             if (existingAccount != null)
             {
@@ -81,34 +81,20 @@ namespace Services.Service
 
         private string HashPassword(string password)
         {
-            using var sha256 = SHA256.Create();
-            byte[] hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-            return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
+            return BCrypt.Net.BCrypt.HashPassword(password);
         }
 
         private bool VerifyPassword(string enteredPassword, string storedHash)
         {
-            string hashedPassword = HashPassword(enteredPassword);
-            return hashedPassword.Equals(storedHash);
+            return BCrypt.Net.BCrypt.Verify(enteredPassword, storedHash);
         }
 
         public async Task<Account> GetUserByClaims(ClaimsPrincipal claims)
         {
-            var userId = claims.FindFirst(c => c.Type == "uid")?.Value;
+            var userId = (claims.FindFirst(c => c.Type == "uid")?.Value) ?? throw new Exception("User not found.");
+            var account = await _accountService.GetById(int.Parse(userId));
 
-            if (userId == null)
-            {
-                throw new Exception("User not found.");
-            }
-
-            var account = await _accountService.GetById(int.Parse(userId)); // Assuming GetById returns Account
-
-            if (account == null)
-            {
-                throw new Exception("User not found.");
-            }
-
-            return account;
+            return account ?? throw new Exception("User not found.");
         }
     }
 }
