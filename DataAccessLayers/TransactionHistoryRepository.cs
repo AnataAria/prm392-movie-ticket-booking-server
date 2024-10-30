@@ -17,10 +17,10 @@ namespace DataAccessLayers
 
         public async Task<List<TransactionHistoryDto>> GetAllTransactionHistoryByAccountId(int accountId)
         {
-            var transactionHistories =  await _context.SolvedTickets
+            var transactionHistories = await _context.SolvedTickets
                 .Where(st => st.AccountId == accountId)
                 .SelectMany(st => st.Transactions)
-                .Select(t => new TransactionHistoryDto
+                .Select(t => new
                 {
                     MovieName = t.SolvedTicket.Ticket.Movie.Name,
                     TicketQuantity = t.SolvedTicket.Quantity,
@@ -31,7 +31,20 @@ namespace DataAccessLayers
                 })
                 .ToListAsync();
 
-            return transactionHistories;
+            var formattedTransactionHistories = transactionHistories
+                .Select(t => new TransactionHistoryDto
+                {
+                    MovieName = t.MovieName,
+                    TicketQuantity = t.TicketQuantity,
+                    TotalPrice = t.TotalPrice,
+                    Time = t.Time.HasValue ? t.Time.Value.ToString("yyyy/MM/dd HH:mm:ss") : string.Empty,
+                    Status = t.Status,
+                    TransactionType = t.TransactionType
+                })
+                .ToList();
+
+            return formattedTransactionHistories;
         }
+
     }
 }

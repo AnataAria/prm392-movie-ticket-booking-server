@@ -11,7 +11,7 @@ namespace BusinessObjects.Dtos.TransactionHistory
         public string MovieName { get; set; } = string.Empty;
         public int? TicketQuantity { get; set; }
         public int? TotalPrice { get; set; }
-        public DateOnly? Time { get; set; }
+        public string? Time { get; set; }
         public string Status { get; set; } = string.Empty;
         public string TransactionType { get; set; } = string.Empty;
     }
