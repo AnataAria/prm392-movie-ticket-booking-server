@@ -1,4 +1,5 @@
 ﻿using BusinessObjects;
+using BusinessObjects.Dtos.Schema_Response;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interface;
 using Services.Service;
@@ -55,10 +56,15 @@ namespace MovieTicketBookingAPI.Controllers
         }
 
         [HttpGet("CheckDiscount/{quantity}")]
-        public async Task<IActionResult> CheckDiscount(int quantity)
+        public async Task<ActionResult<Promotion>> CheckDiscount(int quantity)
         {
-            var promotion = await _promotionService.CheckDiscount(quantity);
-            return Ok(promotion);
+            try
+            {
+                var promotion = await _promotionService.CheckDiscount(quantity);
+                return Ok(promotion);
+            }
+            catch(Exception ex) { return NotFound(new ResponseModel<object> { Success = false, Error = ex.Message, ErrorCode = 404 }); }
+
         }
     }
 }
