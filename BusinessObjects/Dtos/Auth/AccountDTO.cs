@@ -1,4 +1,4 @@
-namespace BusinessObjects.Dtos.Account;
+namespace BusinessObjects.Dtos.Auth;
 
 public class AccountResponseBasic {
     public int Id { get; set; }
