@@ -7,6 +7,8 @@ namespace MovieTicketBookingAPI.Controllers
     public class PingController : ControllerBase
     {
         [HttpGet("CheckServer")]
-        public IActionResult GetPingInfor() => Ok("PING CC DMMM");
+        public IActionResult GetPingInfo() => Ok(new {
+            message = "PING"
+        });
     }
 }
