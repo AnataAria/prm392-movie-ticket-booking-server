@@ -92,7 +92,7 @@ namespace Services.Service
         public async Task<Account> GetUserByClaims(ClaimsPrincipal claims)
         {
             var userId = (claims.FindFirst(c => c.Type == "uid")?.Value) ?? throw new Exception("User not found.");
-            var account = await _accountService.GetById(int.Parse(userId));
+            var account = await _unitOfWork.AccountRepository.GetSystemAccountByIdIncludeRole(int.Parse(userId));
 
             return account ?? throw new Exception("User not found.");
         }

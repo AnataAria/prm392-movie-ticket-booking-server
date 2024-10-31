@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interface;
 using BusinessObjects.Dtos.Schema_Response;
+using BusinessObjects.Dtos.Account;
 
 namespace MovieTicketBookingAPI.Controllers
 {
@@ -33,7 +34,7 @@ namespace MovieTicketBookingAPI.Controllers
                 return Unauthorized(new ResponseModel<AuthResponseDto>()
                 {
                     Data = null,
-                    Error = "User or Password Is Not Correct",
+                    Error = ex.Message,
                     Success = false,
                     ErrorCode = 401
                 });
@@ -68,14 +69,23 @@ namespace MovieTicketBookingAPI.Controllers
         }
 
         [HttpGet("who-am-i"), Authorize]
-        public async Task<ActionResult<ResponseModel<Account>>> WhoAmI()
+        public async Task<ActionResult<ResponseModel<AccountResponseBasic>>> WhoAmI()
         {
             try
             {
                 var account = await _authService.GetUserByClaims(HttpContext.User);
-                return Ok(new ResponseModel<Account>()
+                return Ok(new ResponseModel<AccountResponseBasic>()
                 {
-                    Data = account,
+                    Data = new AccountResponseBasic() {
+                        Id = account.Id,
+                        Name = account.Name,
+                        Address = account.Address,
+                        Phone = account.Phone,
+                        Role = account.Role.Name,
+                        Status = account.Status,
+                        Email = account.Email,
+                        Wallet = account.Wallet,
+                    },
                     Error = null,
                     Success = true,
                     ErrorCode = 200
