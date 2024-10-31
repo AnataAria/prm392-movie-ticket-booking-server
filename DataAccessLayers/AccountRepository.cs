@@ -19,5 +19,9 @@ namespace DataAccessLayers
         {
             return await _context.Accounts.Include(t => t.Role).SingleOrDefaultAsync(m => m.Email == accountEmail);
         }
+
+        public async Task<Account?> GetSystemAccountByIdIncludeRole(int id) {
+            return await _context.Accounts.Include(r => r.Role).SingleOrDefaultAsync(m => m.Id == id);
+        }
     }
 }
