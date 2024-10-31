@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interface;
 using BusinessObjects.Dtos.Schema_Response;
-using BusinessObjects.Dtos.Account;
 
 namespace MovieTicketBookingAPI.Controllers
 {
