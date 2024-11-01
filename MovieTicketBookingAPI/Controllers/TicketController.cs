@@ -1,6 +1,5 @@
 ﻿using BusinessObjects;
 using BusinessObjects.Dtos.Count;
-using BusinessObjects.Dtos.Role;
 using BusinessObjects.Dtos.Schema_Response;
 using BusinessObjects.Dtos.Ticket;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +26,7 @@ namespace MovieTicketBookingAPI.Controllers
                     return NotFound(new ResponseModel<TicketDto>
                     {
                         Success = false,
-                        Error = "Role not found",
+                        Error = "Ticket not found",
                         ErrorCode = 404
                     });
                 }
