@@ -26,6 +26,7 @@ builder.Services.AddSwaggerGen(c => {
             Description = "Please enter 'Bearer' [space] and then your token in the text input below.\n\nExample: \"Bearer 12345abcdef\"",
             Name = "Authorization",
             Type = SecuritySchemeType.ApiKey,
+            Scheme = "Bearer"
         });
         c.AddSecurityRequirement(new OpenApiSecurityRequirement
         {
@@ -98,6 +99,15 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = builder.Configuration["JwtSettings:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"]))
     };
+    options.Events = new JwtBearerEvents
+{
+    OnAuthenticationFailed = context =>
+    {
+        var error = context.Exception;
+        return Task.CompletedTask;
+    }
+};
+
 });
 
 var app = builder.Build();
