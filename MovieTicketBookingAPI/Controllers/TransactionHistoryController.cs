@@ -69,7 +69,7 @@ namespace MovieTicketBookingAPI.Controllers
         //    return Ok(transactionHistory);
         //}
 
-        [HttpGet("ListAll/account/{accountId}")]
+        [HttpGet("ListAll/account")]
         [Authorize]
         public async Task<ActionResult<ResponseModel<IEnumerable<TransactionHistoryDto>>>> GetAllTransactionHistoryByAccountId()
         {
