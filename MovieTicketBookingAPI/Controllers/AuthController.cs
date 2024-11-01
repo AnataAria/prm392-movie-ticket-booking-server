@@ -45,6 +45,7 @@ namespace MovieTicketBookingAPI.Controllers
         {
             try
             {
+                registerDto.RoleId = 2;
                 var newAccount = await _authService.Register(registerDto);
                 return Ok(new ResponseModel<Account>()
                 {
