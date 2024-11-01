@@ -1,4 +1,4 @@
-﻿using BusinessObjects;
+﻿    using BusinessObjects;
 using BusinessObjects.Dtos.Schema_Response;
 using BusinessObjects.Dtos.SolvedTicket;
 using Microsoft.AspNetCore.Authorization;
@@ -135,6 +135,7 @@ namespace MovieTicketBookingAPI.Controllers
         }
 
         [HttpGet("Account/{accountId}")]
+        [Tags("CRUD Server Only")]
         public async Task<IActionResult> GetSolvedTicketsByAccountId(int accountId)
         {
             var solvedTickets = await _solvedTicketService.GetSolvedTicketsByAccountId(accountId);
@@ -142,6 +143,7 @@ namespace MovieTicketBookingAPI.Controllers
         }
 
         [HttpGet("Check/{ticketId}")]
+        [Tags("CRUD Server Only")]
         public async Task<IActionResult> CheckSolvedTicket(int ticketId)
         {
             var result = await _solvedTicketService.CheckSolvedTicket(ticketId);
