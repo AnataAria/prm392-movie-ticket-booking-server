@@ -1,15 +1,18 @@
 ﻿using BusinessObjects;
+using BusinessObjects.Dtos.Schema_Response;
 using BusinessObjects.Dtos.SolvedTicket;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interface;
+using Services.Service;
 
 namespace MovieTicketBookingAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SolvedTicketController(ISolvedTicketService solvedTicketService) : ControllerBase
+    public class SolvedTicketController(ISolvedTicketService solvedTicketService, IAuthService authService) : ControllerBase
     {
         private readonly ISolvedTicketService _solvedTicketService = solvedTicketService;
+        private readonly IAuthService _authService = authService;
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSolvedTicketById(int id)
@@ -56,10 +59,72 @@ namespace MovieTicketBookingAPI.Controllers
         }
 
         [HttpPost("PurchaseTickets")]
-        public async Task<IActionResult> PurchaseTickets([FromBody] PurchaseTicketRequestDto request)
+        public async Task<ActionResult<ResponseModel<PurchaseTicketRequestDto>>> PurchaseTickets([FromBody] PurchaseTicketRequestDto request)
         {
-            await _solvedTicketService.PurchaseTickets(request.ShowtimeId, request.SeatIds, request.Account);
-            return Ok();
+            if (request.ShowtimeId <= 0 || request.SeatIds == null || !request.SeatIds.Any())
+            {
+                return BadRequest(new ResponseModel<string>
+                {
+                    Success = false,
+                    Error = "Invalid ShowtimeId or SeatIds.",
+                    ErrorCode = 400
+                });
+            }
+            try
+            {
+                var account = await _authService.GetUserByClaims(HttpContext.User);
+                if (account == null)
+                {
+                    return NotFound(new ResponseModel<string>
+                    {
+                        Success = false,
+                        Error = "Account not found.",
+                        ErrorCode = 404
+                    });
+                }
+                await _solvedTicketService.PurchaseTickets(request.ShowtimeId, request.SeatIds, account);
+                return Ok(new ResponseModel<PurchaseTicketRequestDto>
+                {
+                    Data = request,
+                    Success = true
+                });
+            }
+            catch (Exception ex) when (ex.Message.Contains("Showtime not found"))
+            {
+                return NotFound(new ResponseModel<string>
+                {
+                    Success = false,
+                    Error = "Showtime not found",
+                    ErrorCode = 404
+                });
+            }
+            catch (Exception ex) when (ex.Message.Contains("Insufficient account balance"))
+            {
+                return BadRequest(new ResponseModel<string>
+                {
+                    Success = false,
+                    Error = "Insufficient account balance",
+                    ErrorCode = 400
+                });
+            }
+            catch (Exception ex) when (ex.Message.Contains("Ticket for seat"))
+            {
+                return BadRequest(new ResponseModel<string>
+                {
+                    Success = false,
+                    Error = ex.Message,
+                    ErrorCode = 400
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseModel<string>
+                {
+                    Success = false,
+                    Error = ex.Message,
+                    ErrorCode = 500
+                });
+            }
         }
 
         [HttpGet("Account/{accountId}")]
