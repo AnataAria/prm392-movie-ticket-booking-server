@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace BusinessObjects.Dtos.Auth;
 
 public class AccountResponseBasic {
@@ -8,7 +10,7 @@ public class AccountResponseBasic {
     public string? Address { get; set; }
 
     public string? Phone { get; set; }
-
+    [JsonIgnore]
     public string? Role { get; set; }
 
     public byte? Status { get; set; }
