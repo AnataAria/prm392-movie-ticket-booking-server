@@ -14,7 +14,6 @@ namespace Services.Service
 {
     public class SolvedTicketService(IUnitOfWork unitOfWork, IPromotionService promotionRepository, IAccountService accountRepository) : GenericService<SolvedTicket>(unitOfWork), ISolvedTicketService
     {
-        private readonly IUnitOfWork _unitOfWork;
         private readonly IPromotionService _promotionRepository = promotionRepository;
         private readonly IAccountService _accountRepository = accountRepository;
 

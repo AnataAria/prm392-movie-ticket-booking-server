@@ -41,6 +41,12 @@ namespace DataAccessLayers
                 .Include(t => t.Seat)
                 .Include(t => t.Showtime)
                 .FirstOrDefaultAsync(t => t.Id == id);
+
+            if (ticket == null)
+            {
+                throw new KeyNotFoundException($"Ticket with ID {id} not found.");
+            }
+
             return ticket;
         }
 

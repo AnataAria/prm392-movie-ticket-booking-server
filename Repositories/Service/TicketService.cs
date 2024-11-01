@@ -13,9 +13,6 @@ namespace Services.Service
 {
     public class TicketService(GenericRepository<Ticket> ticketDAO, IUnitOfWork unitOfWork) : GenericService<Ticket>(unitOfWork), ITicketService
     {
-        private readonly GenericRepository<Ticket> _ticketDAO = ticketDAO;
-        private readonly IUnitOfWork _unitOfWork;
-
         public async Task<int?> CountQuantityPeopleJoinEvent(Movie eventName)
         {
             var totalQuantity = eventName.Tickets.Sum(t => t.Quantity ?? 0);
