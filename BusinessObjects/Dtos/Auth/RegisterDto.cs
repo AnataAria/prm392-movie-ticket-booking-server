@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace BusinessObjects.Dtos.Auth
@@ -11,6 +12,7 @@ namespace BusinessObjects.Dtos.Auth
         public string FullName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+        [JsonIgnore]
         public int RoleId { get; set; }
     }
 }
