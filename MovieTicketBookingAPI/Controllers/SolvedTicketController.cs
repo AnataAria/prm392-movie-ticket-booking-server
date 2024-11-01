@@ -1,6 +1,7 @@
 ﻿using BusinessObjects;
 using BusinessObjects.Dtos.Schema_Response;
 using BusinessObjects.Dtos.SolvedTicket;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interface;
 using Services.Service;
@@ -59,6 +60,7 @@ namespace MovieTicketBookingAPI.Controllers
         }
 
         [HttpPost("PurchaseTickets")]
+        [Authorize]
         public async Task<ActionResult<ResponseModel<PurchaseTicketRequestDto>>> PurchaseTickets([FromBody] PurchaseTicketRequestDto request)
         {
             if (request.ShowtimeId <= 0 || request.SeatIds == null || !request.SeatIds.Any())
