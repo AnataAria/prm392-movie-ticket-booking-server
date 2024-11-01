@@ -53,7 +53,7 @@ namespace MovieTicketBookingAPI.Controllers
         }
 
         [HttpGet("GetTicketsByMovieId/{movieId}")]
-        public async Task<ActionResult<ResponseModel<TicketDto>>> GetTicketsByMovieId(int movieId)
+        public async Task<ActionResult<ResponseModel<IEnumerable<TicketDto>>>> GetTicketsByMovieId(int movieId)
         {
             try
             {
