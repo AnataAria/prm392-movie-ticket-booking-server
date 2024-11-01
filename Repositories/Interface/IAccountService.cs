@@ -12,5 +12,7 @@ namespace Services.Interface
         Task<List<Account>> GetAllName();
         Task MinusDebt(int? quantity, int? prize, double? discount, Account account);
         Task<Account?> GetSystemAccountByEmailAndPassword(string email, string password);
+        Task<Account?> GetAccountByIdIncludeAsync(int id);
+        Task<IEnumerable<Account>> GetAllIncludeAsync();
     }
 }

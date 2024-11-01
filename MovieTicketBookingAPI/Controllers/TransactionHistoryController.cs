@@ -1,18 +1,22 @@
 ﻿using BusinessObjects;
 using BusinessObjects.Dtos.Schema_Response;
+using BusinessObjects.Dtos.Ticket;
 using BusinessObjects.Dtos.TransactionHistory;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
 using Services.Interface;
 using Services.Service;
+using System.Collections.Generic;
 
 namespace MovieTicketBookingAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TransactionHistoryController(ITransactionHistoryService transactionHistoryService) : ControllerBase
+    public class TransactionHistoryController(ITransactionHistoryService transactionHistoryService, IAuthService authService) : ControllerBase
     {
         private readonly ITransactionHistoryService _transactionHistoryService = transactionHistoryService;
+        private readonly IAuthService _authService = authService;
 
         //[HttpGet("{id}")]
         //public async Task<IActionResult> GetTransactionHistoryById(int id)
@@ -66,32 +70,31 @@ namespace MovieTicketBookingAPI.Controllers
         //}
 
         [HttpGet("ListAll/account/{accountId}")]
-        public async Task<ActionResult<ResponseModel<IEnumerable<TransactionHistoryDto>>>> GetAllTransactionHistoryByAccountId(int accountId)
+        [Authorize]
+        public async Task<ActionResult<ResponseModel<IEnumerable<TransactionHistoryDto>>>> GetAllTransactionHistoryByAccountId()
         {
-            var response = new ResponseModel<IEnumerable<TransactionHistoryDto>>();
-
+            var account = await _authService.GetUserByClaims(HttpContext.User);
             try
             {
-                var transactionHistories = await _transactionHistoryService.GetAllTransactionHistoryByAccountId(accountId);
-
+                var transactionHistories = await _transactionHistoryService.GetAllTransactionHistoryByAccountId(account.Id);
                 if (transactionHistories == null || !transactionHistories.Any())
                 {
-                    response.Success = false;
-                    response.Error = "No transaction history found for the specified account ID.";
-                    response.ErrorCode = 404;
-                    return NotFound(response);
+                    return Ok(new ResponseModel<IEnumerable<TransactionHistoryDto>>
+                    {
+                        Success = true,
+                        Data = transactionHistories
+                    });
                 }
 
-                response.Data = transactionHistories;
-                response.Success = true;
-                return Ok(response);
+                return Ok(new ResponseModel<IEnumerable<TransactionHistoryDto>>
+                {
+                    Success = true,
+                    Data = transactionHistories
+                });
             }
             catch (Exception ex)
             {
-                response.Success = false;
-                response.Error = ex.Message;
-                response.ErrorCode = 500;
-                return StatusCode(500, response);
+                return StatusCode(500, new ResponseModel<TransactionHistoryDto> { Success = false, Error = ex.Message, ErrorCode = 500 });
             }
         }
     }

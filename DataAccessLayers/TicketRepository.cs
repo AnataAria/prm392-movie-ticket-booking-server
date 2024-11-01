@@ -33,5 +33,36 @@ namespace DataAccessLayers
             _context.Entry(ticket).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
+
+        public async Task<Ticket?> GetByIdInclude(int id)
+        {
+            var ticket = await _context.Tickets
+                .Include(t => t.Movie)
+                .Include(t => t.Seat)
+                .Include(t => t.Showtime)
+                .FirstOrDefaultAsync(t => t.Id == id);
+            return ticket;
+        }
+
+        public async Task<List<Ticket>> GetByMovieIdInclude(int movieId)
+        {
+            var tickets = await _context.Tickets
+                .Include(t => t.Movie)
+                .Include(t => t.Seat)
+                .Include(t => t.Showtime) 
+                .Where(t => t.MovieID == movieId) 
+                .ToListAsync();  
+
+            return tickets;
+        }
+
+        public async Task<IEnumerable<Ticket>> GetAllIncludeAsync()
+        {
+            return await _context.Tickets
+                .Include(t => t.Movie)
+                .Include(t => t.Seat)
+                .Include(t => t.Showtime)
+                .ToListAsync();
+        }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using BusinessObjects;
+using BusinessObjects.Dtos.Account;
 using BusinessObjects.Dtos.Auth;
 using BusinessObjects.Dtos.Schema_Response;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interface;
 using Services.Service;
@@ -10,16 +12,19 @@ namespace MovieTicketBookingAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountController(IAccountService accountService) : ControllerBase
+    public class AccountController(IAccountService accountService, IAuthService authService) : ControllerBase
     {
         private readonly IAccountService _accountService = accountService;
+        private readonly IAuthService _authService = authService;
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ResponseModel<AccountResponseBasic>>> GetById(int id)
         {
             try
             {
-                var account = await _accountService.GetById(id);
+                var account = await _accountService.GetAccountByIdIncludeAsync(id);
+                if (account == null)
+                    return NotFound(new ResponseModel<AccountResponseBasic> { Success = false, Error = "Account not found", ErrorCode = 404 });
                 var accountResponse = new AccountResponseBasic
                 {
                     Id = account.Id,
@@ -31,8 +36,6 @@ namespace MovieTicketBookingAPI.Controllers
                     Email = account.Email,
                     Wallet = account.Wallet
                 };
-                if (account == null)
-                    return NotFound(new ResponseModel<AccountResponseBasic> { Success = false, Error = "Account not found", ErrorCode = 404 });
 
                 return Ok(new ResponseModel<AccountResponseBasic> { Success = true, Data = accountResponse });
             }
@@ -47,7 +50,7 @@ namespace MovieTicketBookingAPI.Controllers
         {
             try
             {
-                var accounts = await _accountService.GetAll();
+                var accounts = await _accountService.GetAllIncludeAsync();
                 var accountResponses = accounts.Select(account => new AccountResponseBasic
                 {
                     Id = account.Id,
@@ -68,6 +71,7 @@ namespace MovieTicketBookingAPI.Controllers
         }
 
         [HttpPost]
+        [Tags("CRUD Server Only")]
         public async Task<ActionResult<ResponseModel<AccountResponseBasic>>> Create([FromBody] Account account)
         {
             if (account == null)
@@ -81,7 +85,7 @@ namespace MovieTicketBookingAPI.Controllers
                     Name = account.Name,
                     Address = account.Address,
                     Phone = account.Phone,
-                    Role = account.Role.Name,
+                    Role = "Anonymous",
                     Status = account.Status,
                     Email = account.Email,
                     Wallet = account.Wallet
@@ -95,6 +99,7 @@ namespace MovieTicketBookingAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [Tags("CRUD Server Only")]
         public async Task<ActionResult<ResponseModel<AccountResponseBasic>>> Update(int id, [FromBody] AccountResponseBasic account)
         {
             if (account == null)
@@ -151,7 +156,44 @@ namespace MovieTicketBookingAPI.Controllers
             }
         }
 
+        [HttpPut("UpdateUser/{id}")]
+        [Authorize]
+        public async Task<ActionResult<ResponseModel<UserDto>>> UpdateUser([FromBody] UserDto account)
+        {
+            var accountUser = await _authService.GetUserByClaims(HttpContext.User);
+            if (account == null)
+                return BadRequest(new ResponseModel<UserDto> { Success = false, Error = "Invalid account data", ErrorCode = 400 });
+
+            try
+            {
+                var existingAccount = await _accountService.GetById(accountUser.Id);
+                if (existingAccount == null)
+                    return NotFound(new ResponseModel<UserDto> { Success = false, Error = "Account not found", ErrorCode = 404 });
+
+                if (existingAccount.Name != account.Name)
+                {
+                    existingAccount.Name = account.Name;
+                }
+                if (existingAccount.Address != account.Address)
+                {
+                    existingAccount.Address = account.Address;
+                }
+                if (existingAccount.Phone != account.Phone)
+                {
+                    existingAccount.Phone = account.Phone;
+                }
+
+                await _accountService.Update(existingAccount);
+                return Ok(new ResponseModel<UserDto> { Success = true, Data = account });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseModel<UserDto> { Success = false, Error = ex.Message, ErrorCode = 500 });
+            }
+        }
+
         [HttpDelete("{id}")]
+        [Tags("CRUD Server Only")]
         public async Task<ActionResult<ResponseModel<AccountResponseBasic>>> Delete(int id)
         {
             try
@@ -166,7 +208,7 @@ namespace MovieTicketBookingAPI.Controllers
                     Name = existingAccount.Name,
                     Address = existingAccount.Address,
                     Phone = existingAccount.Phone,
-                    Role = existingAccount.Role.Name,
+                    Role = "Anonymous",
                     Status = existingAccount.Status,
                     Email = existingAccount.Email,
                     Wallet = existingAccount.Wallet

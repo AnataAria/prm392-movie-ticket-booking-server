@@ -1,4 +1,7 @@
 ﻿using BusinessObjects;
+using BusinessObjects.Dtos.Auth;
+using BusinessObjects.Dtos.Movie;
+using BusinessObjects.Dtos.Promotion;
 using BusinessObjects.Dtos.Schema_Response;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interface;
@@ -13,21 +16,71 @@ namespace MovieTicketBookingAPI.Controllers
         private readonly IPromotionService _promotionService = promotionService;
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<ActionResult<ResponseModel<PromotionDto>>> GetById(int id)
         {
-            var promotion = await _promotionService.GetById(id);
-            if (promotion == null) return NotFound();
-            return Ok(promotion);
+            try
+            {
+                var promotion = await _promotionService.GetById(id);
+                if (promotion == null)
+                {
+                    return NotFound(new ResponseModel<PromotionDto>
+                    {
+                        Success = false,
+                        Error = "Promotion not found",
+                        ErrorCode = 404
+                    });
+                }
+
+                var promotionDto = new PromotionDto
+                {
+                    Id = promotion.Id,
+                    Condition = promotion.Condition,
+                    Discount = promotion.Discount,
+                };
+
+                return Ok(new ResponseModel<PromotionDto>
+                {
+                    Success = true,
+                    Data = promotionDto
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseModel<PromotionDto> { Success = false, Error = ex.Message, ErrorCode = 500 });
+            }
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<ActionResult<ResponseModel<PromotionDto>>> GetAll()
         {
-            var promotions = await _promotionService.GetAll();
-            return Ok(promotions);
+            try
+            {
+                var promotions = await _promotionService.GetAll();
+                var promotionResponses = promotions.Select(promotion => new PromotionDto
+                {
+                    Id = promotion.Id,
+                    Condition = promotion.Condition,
+                    Discount = promotion.Discount,
+                });
+                return Ok(new ResponseModel<IEnumerable<PromotionDto>>
+                {
+                    Success = true,
+                    Data = promotionResponses
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseModel<IEnumerable<PromotionDto>>
+                {
+                    Success = false,
+                    Error = ex.Message,
+                    ErrorCode = 500
+                });
+            }
         }
 
         [HttpPost]
+        [Tags("CRUD Server Only")]
         public async Task<IActionResult> Create([FromBody] Promotion promotion)
         {
             var createdPromotion = await _promotionService.Add(promotion);
@@ -35,6 +88,7 @@ namespace MovieTicketBookingAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [Tags("CRUD Server Only")]
         public async Task<IActionResult> Update(int id, [FromBody] Promotion promotion)
         {
             var existingPromotion = await _promotionService.GetById(id);
@@ -46,6 +100,7 @@ namespace MovieTicketBookingAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Tags("CRUD Server Only")]
         public async Task<IActionResult> Delete(int id)
         {
             var existingPromotion = await _promotionService.GetById(id);
@@ -55,16 +110,16 @@ namespace MovieTicketBookingAPI.Controllers
             return NoContent();
         }
 
-        [HttpGet("CheckDiscount/{quantity}")]
-        public async Task<ActionResult<Promotion>> CheckDiscount(int quantity)
-        {
-            try
-            {
-                var promotion = await _promotionService.CheckDiscount(quantity);
-                return Ok(promotion);
-            }
-            catch(Exception ex) { return NotFound(new ResponseModel<object> { Success = false, Error = ex.Message, ErrorCode = 404 }); }
+        //[HttpGet("CheckDiscount/{quantity}")]
+        //public async Task<ActionResult<Promotion>> CheckDiscount(int quantity)
+        //{
+        //    try
+        //    {
+        //        var promotion = await _promotionService.CheckDiscount(quantity);
+        //        return Ok(promotion);
+        //    }
+        //    catch(Exception ex) { return NotFound(new ResponseModel<object> { Success = false, Error = ex.Message, ErrorCode = 404 }); }
 
-        }
+        //}
     }
 }

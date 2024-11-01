@@ -1,6 +1,7 @@
 ﻿using BusinessObjects;
 using DataAccessLayers;
 using DataAccessLayers.UnitOfWork;
+using Microsoft.VisualBasic;
 using Services.Interface;
 using System;
 using System.Collections.Generic;
@@ -32,5 +33,9 @@ namespace Services.Service
         {
             await _unitOfWork.TicketRepository.UpdateNew(ticket);
         }
+
+        public async Task<IEnumerable<Ticket>> GetAllIncludeAsync() => await _unitOfWork.TicketRepository.GetAllIncludeAsync();
+        public async Task<Ticket?> GetByIdInclude(int id) => await _unitOfWork.TicketRepository.GetByIdInclude(id);
+        public async Task<List<Ticket>> GetByMovieIdInclude(int movieId) => await _unitOfWork.TicketRepository.GetByMovieIdInclude(movieId);
     }
 }

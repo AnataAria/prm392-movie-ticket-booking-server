@@ -23,5 +23,19 @@ namespace DataAccessLayers
         public async Task<Account?> GetSystemAccountByIdIncludeRole(int id) {
             return await _context.Accounts.Include(r => r.Role).SingleOrDefaultAsync(m => m.Id == id);
         }
+
+        public async Task<Account?> GetAccountByIdIncludeAsync(int id)
+        {
+            return await _context.Accounts
+                .Include(c => c.Role)
+                .FirstOrDefaultAsync(c => c.Id == id);
+        }
+
+        public async Task<IEnumerable<Account>> GetAllIncludeAsync()
+        {
+            return await _context.Accounts
+                .Include(s => s.Role)
+                .ToListAsync();
+        }
     }
 }

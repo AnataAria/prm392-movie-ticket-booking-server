@@ -1,6 +1,9 @@
 ﻿using BusinessObjects;
+using BusinessObjects.Dtos.Schema_Response;
+using BusinessObjects.Dtos.Ticket;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interface;
+using System.Net.Sockets;
 
 namespace MovieTicketBookingAPI.Controllers
 {
@@ -11,21 +14,57 @@ namespace MovieTicketBookingAPI.Controllers
         private readonly ITransactionTypeService _transactionTypeService = transactionTypeService;
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetTransactionTypeById(int id)
+        public async Task<ActionResult<ResponseModel<TransactionType>>> GetTransactionTypeById(int id)
         {
-            var transactionType = await _transactionTypeService.GetById(id);
-            if (transactionType == null) return NotFound();
-            return Ok(transactionType);
+            try
+            {
+                var transactionType = await _transactionTypeService.GetById(id);
+                if (transactionType == null)
+                {
+                    return NotFound(new ResponseModel<TransactionType>
+                    {
+                        Success = false,
+                        Error = "Role not found",
+                        ErrorCode = 404
+                    });
+                }
+                return Ok(new ResponseModel<TransactionType>
+                {
+                    Success = true,
+                    Data = transactionType
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseModel<TicketDto> { Success = false, Error = ex.Message, ErrorCode = 500 });
+            }
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllTransactionTypes()
+        public async Task<ActionResult<ResponseModel<TransactionType>>> GetAllTransactionTypes()
         {
-            var transactionTypes = await _transactionTypeService.GetAll();
-            return Ok(transactionTypes);
+            try
+            {
+                var transactionTypes = await _transactionTypeService.GetAll();
+                return Ok(new ResponseModel<IEnumerable<TransactionType>>
+                {
+                    Success = true,
+                    Data = transactionTypes
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseModel<IEnumerable<TransactionType>>
+                {
+                    Success = false,
+                    Error = ex.Message,
+                    ErrorCode = 500
+                });
+            }
         }
 
         [HttpPost]
+        [Tags("CRUD Server Only")]
         public async Task<IActionResult> AddTransactionType([FromBody] TransactionType transactionType)
         {
             var result = await _transactionTypeService.Add(transactionType);
@@ -33,6 +72,7 @@ namespace MovieTicketBookingAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [Tags("CRUD Server Only")]
         public async Task<IActionResult> UpdateTransactionType(int id, [FromBody] TransactionType transactionType)
         {
             var existingTransactionType = await _transactionTypeService.GetById(id);
@@ -44,6 +84,7 @@ namespace MovieTicketBookingAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Tags("CRUD Server Only")]
         public async Task<IActionResult> DeleteTransactionType(int id)
         {
             var existingTransactionType = await _transactionTypeService.GetById(id);

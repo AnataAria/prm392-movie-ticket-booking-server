@@ -12,5 +12,8 @@ namespace Services.Interface
         Task<int?> CountQuantityPeopleJoinEvent(Movie eventName);
         Task<List<Ticket>> GetByMovieIdAsync(int eventId);
         Task UpdateNewTicket(Ticket ticket);
+        Task<Ticket?> GetByIdInclude(int id);
+        Task<IEnumerable<Ticket>> GetAllIncludeAsync();
+        Task<List<Ticket>> GetByMovieIdInclude(int movieId);
     }
 }

@@ -12,6 +12,7 @@ namespace MovieTicketBookingAPI.Controllers
         private readonly ITransactionService _transactionService = transactionService;
 
         [HttpGet("{id}")]
+        [Tags("CRUD Server Only")]
         public async Task<IActionResult> GetTransactionById(int id)
         {
             var transaction = await _transactionService.GetById(id);
@@ -20,6 +21,7 @@ namespace MovieTicketBookingAPI.Controllers
         }
 
         [HttpGet]
+        [Tags("CRUD Server Only")]
         public async Task<IActionResult> GetAllTransactions()
         {
             var transactions = await _transactionService.GetAll();
@@ -27,6 +29,7 @@ namespace MovieTicketBookingAPI.Controllers
         }
 
         [HttpPost]
+        [Tags("CRUD Server Only")]
         public async Task<IActionResult> AddTransaction([FromBody] Transaction transaction)
         {
             var result = await _transactionService.Add(transaction);
@@ -34,6 +37,7 @@ namespace MovieTicketBookingAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [Tags("CRUD Server Only")]
         public async Task<IActionResult> UpdateTransaction(int id, [FromBody] Transaction transaction)
         {
             var existingTransaction = await _transactionService.GetById(id);
@@ -45,6 +49,7 @@ namespace MovieTicketBookingAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Tags("CRUD Server Only")]
         public async Task<IActionResult> DeleteTransaction(int id)
         {
             var existingTransaction = await _transactionService.GetById(id);

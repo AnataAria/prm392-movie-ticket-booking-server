@@ -106,6 +106,7 @@ namespace MovieTicketBookingAPI.Controllers
         }
 
         [HttpPost]
+        [Tags("CRUD Server Only")]
         public async Task<IActionResult> Create([FromBody] Movie eventObj)
         {
             var createdEvent = await _movieService.Add(eventObj);
@@ -113,6 +114,7 @@ namespace MovieTicketBookingAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [Tags("CRUD Server Only")]
         public async Task<IActionResult> Update(int id, [FromBody] Movie eventObj)
         {
             var existingEvent = await _movieService.GetById(id);
@@ -124,6 +126,7 @@ namespace MovieTicketBookingAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Tags("CRUD Server Only")]
         public async Task<IActionResult> Delete(int id)
         {
             var existingEvent = await _movieService.GetById(id);

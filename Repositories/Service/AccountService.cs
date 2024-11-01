@@ -37,5 +37,8 @@ namespace Services.Service
         {
             return await _unitOfWork.AccountRepository.GetSystemAccountByAccountEmailAndPassword(email, password);
         }
+
+        public async Task<Account?> GetAccountByIdIncludeAsync(int id) => await _unitOfWork.AccountRepository.GetAccountByIdIncludeAsync(id);
+        public async Task<IEnumerable<Account>> GetAllIncludeAsync() => await _unitOfWork.AccountRepository.GetAllAsync();
     }
 }

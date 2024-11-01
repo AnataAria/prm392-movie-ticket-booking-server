@@ -16,6 +16,7 @@ namespace MovieTicketBookingAPI.Controllers
         private readonly IAuthService _authService = authService;
 
         [HttpGet("{id}")]
+        [Tags("CRUD Server Only")]
         public async Task<IActionResult> GetSolvedTicketById(int id)
         {
             var solvedTicket = await _solvedTicketService.GetById(id);
@@ -25,6 +26,7 @@ namespace MovieTicketBookingAPI.Controllers
         }
 
         [HttpGet]
+        [Tags("CRUD Server Only")]
         public async Task<IActionResult> GetAllSolvedTickets()
         {
             var solvedTickets = await _solvedTicketService.GetAll();
@@ -32,6 +34,7 @@ namespace MovieTicketBookingAPI.Controllers
         }
 
         [HttpPost]
+        [Tags("CRUD Server Only")]
         public async Task<IActionResult> AddSolvedTicket([FromBody] SolvedTicket solvedTicket)
         {
             var result = await _solvedTicketService.Add(solvedTicket);
@@ -39,6 +42,7 @@ namespace MovieTicketBookingAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [Tags("CRUD Server Only")]
         public async Task<IActionResult> UpdateSolvedTicket(int id, [FromBody] SolvedTicket solvedTicket)
         {
             var existingSolvedTicket = await _solvedTicketService.GetById(id);
@@ -50,6 +54,7 @@ namespace MovieTicketBookingAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Tags("CRUD Server Only")]
         public async Task<IActionResult> DeleteSolvedTicket(int id)
         {
             var existingSolvedTicket = await _solvedTicketService.GetById(id);
