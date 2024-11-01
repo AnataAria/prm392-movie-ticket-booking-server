@@ -46,7 +46,7 @@ namespace MovieTicketBookingAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<ActionResult<ResponseModel<IEnumerable<AccountResponseBasic>>>> GetAll()
         {
             try
             {
