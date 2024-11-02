@@ -192,6 +192,35 @@ namespace MovieTicketBookingAPI.Controllers
             }
         }
 
+        [HttpPut("UpdateWallet")]
+        [Authorize]
+        public async Task<ActionResult<ResponseModel<UserUpdateWalletDto>>> UpdateWallet([FromQuery] double wallet)
+        {
+            var accountUser = await _authService.GetUserByClaims(HttpContext.User);
+            if (wallet < 0)
+                return BadRequest(new ResponseModel<UserUpdateWalletDto> { Success = false, Error = "Invalid number", ErrorCode = 400 });
+            try
+            {
+                var existingAccount = await _accountService.GetById(accountUser.Id);
+                if (existingAccount == null)
+                    return NotFound(new ResponseModel<UserUpdateWalletDto> { Success = false, Error = "Account not found", ErrorCode = 404 });
+                existingAccount.Wallet += wallet;
+
+                await _accountService.Update(existingAccount);
+                var updatedUserDto = new UserUpdateWalletDto
+                {
+                    Id = existingAccount.Id,
+                    Name = existingAccount.Name,
+                    Wallet = existingAccount.Wallet
+                };
+                return Ok(new ResponseModel<UserUpdateWalletDto> { Success = true, Data = updatedUserDto });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseModel<UserUpdateWalletDto> { Success = false, Error = ex.Message, ErrorCode = 500 });
+            }
+        }
+
         [HttpDelete("{id}")]
         [Tags("CRUD Server Only")]
         public async Task<ActionResult<ResponseModel<AccountResponseBasic>>> Delete(int id)

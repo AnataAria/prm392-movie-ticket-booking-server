@@ -19,18 +19,15 @@ namespace Services.Service
             return await _accountDAOHigher.GetAllName();
         }
 
-        public async Task MinusDebt(int? quantity, int? prize, double? discount, Account account)
+        public async Task MinusDebt(double totalAmount, Account account)
         {
-            double? accountPay = 0;
-            if (quantity < 10) accountPay = account.Wallet! - (double)prize! * (double)quantity;
-            else accountPay = account.Wallet! - ((double)prize! * (double)quantity! - (double)prize * (double)quantity * discount);
+            if (account.Wallet < totalAmount)
+                throw new Exception("Insufficient funds");
 
-            if (accountPay >= 0)
-            {
-                account.Wallet = accountPay;
-               await _unitOfWork.AccountRepository.UpdateAsync(account);
-               await _unitOfWork.SaveChangesAsync();
-            }
+            account.Wallet -= totalAmount;
+
+            await _unitOfWork.AccountRepository.UpdateAsync(account);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task<Account?> GetSystemAccountByEmailAndPassword(string email, string password)

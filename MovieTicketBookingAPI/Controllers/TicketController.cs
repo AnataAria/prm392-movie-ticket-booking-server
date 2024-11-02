@@ -33,6 +33,7 @@ namespace MovieTicketBookingAPI.Controllers
                 var ticketDto = new TicketDto
                 {
                     Id = ticket.Id,
+                    SeatID = ticket.SeatID,
                     SeatName = ticket.Seat.SeatNumber ?? "null",
                     MovieName = ticket.Movie.Name ?? "null",
                     ShowDateTime = ticket.Showtime.ShowDateTime,
@@ -61,6 +62,7 @@ namespace MovieTicketBookingAPI.Controllers
                 var ticketResponses = tickets.Select(ticket => new TicketDto
                 {
                     Id = ticket.Id,
+                    SeatID = ticket.SeatID,
                     SeatName = ticket.Seat.SeatNumber ?? "null",
                     MovieName = ticket.Movie.Name ?? "null",
                     ShowDateTime = ticket.Showtime.ShowDateTime,
@@ -94,6 +96,7 @@ namespace MovieTicketBookingAPI.Controllers
                 var ticketResponses = tickets.Select(ticket => new TicketDto
                 {
                     Id = ticket.Id,
+                    SeatID = ticket.SeatID,
                     SeatName = ticket.Seat.SeatNumber ?? "null",
                     MovieName = ticket.Movie.Name ?? "null",
                     ShowDateTime = ticket.Showtime.ShowDateTime,

@@ -10,7 +10,7 @@ namespace Services.Interface
     public interface IAccountService : IGenericService<Account>
     {
         Task<List<Account>> GetAllName();
-        Task MinusDebt(int? quantity, int? prize, double? discount, Account account);
+        Task MinusDebt(double totalAmount, Account account);
         Task<Account?> GetSystemAccountByEmailAndPassword(string email, string password);
         Task<Account?> GetAccountByIdIncludeAsync(int id);
         Task<IEnumerable<Account>> GetAllIncludeAsync();

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interface;
 using Services.Service;
+using System;
 
 namespace MovieTicketBookingAPI.Controllers
 {
@@ -66,13 +67,14 @@ namespace MovieTicketBookingAPI.Controllers
 
         [HttpPost("PurchaseTickets")]
         [Authorize]
-        public async Task<ActionResult<ResponseModel<PurchaseTicketRequestDto>>> PurchaseTickets([FromBody] PurchaseTicketRequestDto request)
+        public async Task<ActionResult<ResponseModel<PurchaseTicketResponseDto>>> PurchaseTickets([FromBody] PurchaseTicketRequestDto request)
         {
             if (request.ShowtimeId <= 0 || request.SeatIds == null || !request.SeatIds.Any())
             {
-                return BadRequest(new ResponseModel<string>
+                return BadRequest(new ResponseModel<PurchaseTicketResponseDto>
                 {
                     Success = false,
+                    Data = null,
                     Error = "Invalid ShowtimeId or SeatIds.",
                     ErrorCode = 400
                 });
@@ -82,50 +84,64 @@ namespace MovieTicketBookingAPI.Controllers
                 var account = await _authService.GetUserByClaims(HttpContext.User);
                 if (account == null)
                 {
-                    return NotFound(new ResponseModel<string>
+                    return NotFound(new ResponseModel<PurchaseTicketResponseDto>
                     {
                         Success = false,
+                        Data = null,
                         Error = "Account not found.",
                         ErrorCode = 404
                     });
                 }
-                await _solvedTicketService.PurchaseTickets(request.ShowtimeId, request.SeatIds, account);
-                return Ok(new ResponseModel<PurchaseTicketRequestDto>
+                var response= await _solvedTicketService.PurchaseTickets(request.ShowtimeId, request.SeatIds, account);
+                return Ok(new ResponseModel<PurchaseTicketResponseDto>
                 {
-                    Data = request,
+                    Data = response,
                     Success = true
                 });
             }
             catch (Exception ex) when (ex.Message.Contains("Showtime not found"))
             {
-                return NotFound(new ResponseModel<string>
+                return NotFound(new ResponseModel<PurchaseTicketResponseDto>
                 {
                     Success = false,
+                    Data = null,
                     Error = "Showtime not found",
                     ErrorCode = 404
                 });
             }
             catch (Exception ex) when (ex.Message.Contains("Insufficient account balance"))
             {
-                return BadRequest(new ResponseModel<string>
+                return BadRequest(new ResponseModel<PurchaseTicketResponseDto>
                 {
                     Success = false,
+                    Data = null,
                     Error = "Insufficient account balance",
+                    ErrorCode = 400
+                });
+            }
+            catch (Exception ex) when (ex.Message.Contains("Insufficient funds"))
+            {
+                return BadRequest(new ResponseModel<PurchaseTicketResponseDto>
+                {
+                    Success = false,
+                    Data = null,
+                    Error = "Insufficient funds",
                     ErrorCode = 400
                 });
             }
             catch (Exception ex) when (ex.Message.Contains("Ticket for seat"))
             {
-                return BadRequest(new ResponseModel<string>
+                return BadRequest(new ResponseModel<PurchaseTicketResponseDto>
                 {
                     Success = false,
+                    Data = null,
                     Error = ex.Message,
                     ErrorCode = 400
                 });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ResponseModel<string>
+                return StatusCode(500, new ResponseModel<PurchaseTicketResponseDto>
                 {
                     Success = false,
                     Error = ex.Message,

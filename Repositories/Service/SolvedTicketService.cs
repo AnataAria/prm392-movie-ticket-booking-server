@@ -1,4 +1,5 @@
 ﻿using BusinessObjects;
+using BusinessObjects.Dtos.SolvedTicket;
 using DataAccessLayers;
 using DataAccessLayers.UnitOfWork;
 using Microsoft.IdentityModel.Tokens;
@@ -17,17 +18,17 @@ namespace Services.Service
         private readonly IPromotionService _promotionRepository = promotionRepository;
         private readonly IAccountService _accountRepository = accountRepository;
 
-        public async Task PurchaseTickets(int showtimeId, List<int> seatIds, Account account)
+        public async Task<PurchaseTicketResponseDto> PurchaseTickets(int showtimeId, List<int> seatIds, Account account)
         {
-            var showtime = await _unitOfWork.ShowTimeRepository.GetByIdAsync(showtimeId) ?? throw new Exception("Showtime not found");
-            var promotion = await _promotionRepository.CheckDiscount(seatIds.Count);
+            var showtime = await _unitOfWork.ShowTimeRepository.GetByIdAsync(showtimeId)
+                ?? throw new Exception("Showtime not found");
             double totalTicketPrice = showtime.Tickets
                 .Where(t => seatIds.Contains(t.SeatID) && t.Quantity > 0)
                 .Sum(t => (double)t.Price!);
-            double finalPrice = totalTicketPrice * (1 - (promotion?.Discount ?? 0.0));
 
-            if (finalPrice > account.Wallet) throw new Exception("Insufficient account balance");
-            await _accountRepository.MinusDebt(seatIds.Count, showtime.Tickets.First().Price, promotion?.Discount ?? 0.0, account);
+            if (totalTicketPrice > account.Wallet)
+                throw new Exception("Insufficient account balance");
+            await _accountRepository.MinusDebt(totalTicketPrice, account);
 
             var solvedTickets = new List<SolvedTicket>();
             var transactions = new List<Transaction>();
@@ -36,7 +37,8 @@ namespace Services.Service
             foreach (var seatId in seatIds)
             {
                 var ticket = showtime.Tickets.FirstOrDefault(t => t.SeatID == seatId && t.Quantity > 0)
-                             ?? throw new Exception($"Ticket for seat {seatId} is unavailable");
+                      ?? throw new Exception($"Ticket for seat {seatId} is unavailable");
+
                 ticket.Quantity -= 1;
                 if (ticket.Quantity == 0) ticket.Status = 0;
 
@@ -45,8 +47,7 @@ namespace Services.Service
                     AccountId = account.Id,
                     TicketId = ticket.Id,
                     Quantity = 1,
-                    TotalPrice = (int)(ticket.Price * (1 - (promotion?.Discount ?? 0.0))),
-                    PromotionId = promotion?.Id
+                    TotalPrice = (int)ticket.Price
                 });
                 transactions.Add(new Transaction
                 {
@@ -58,7 +59,7 @@ namespace Services.Service
                 transactionHistories.Add(new TransactionHistory
                 {
                     TransactionId = transactions.Last().Id,
-                    Price = (int)finalPrice,
+                    Price = (int)totalTicketPrice,
                     Time = DateOnly.FromDateTime(DateTime.Now),
                     Status = "Completed"
                 });
@@ -68,6 +69,13 @@ namespace Services.Service
             await _unitOfWork.TransactionRepository.AddRangeAsync(transactions);
             await _unitOfWork.TransactionHistoryRepository.AddRangeAsync(transactionHistories);
             await _unitOfWork.SaveChangesAsync();
+
+            return new PurchaseTicketResponseDto
+            {
+                TotalPrice = totalTicketPrice,
+                MovieName = showtime.Movie.Name,
+                ShowDateTime = showtime.ShowDateTime,
+            };
         }
 
 

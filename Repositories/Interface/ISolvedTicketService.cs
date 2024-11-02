@@ -1,4 +1,5 @@
 ﻿using BusinessObjects;
+using BusinessObjects.Dtos.SolvedTicket;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Services.Interface
 {
     public interface ISolvedTicketService : IGenericService<SolvedTicket>
     {
-        Task PurchaseTickets(int showtimeId, List<int> seatIds, Account account);
+        Task<PurchaseTicketResponseDto> PurchaseTickets(int showtimeId, List<int> seatIds, Account account);
         Task<List<SolvedTicket>> GetSolvedTicketsByAccountId(int accountId);
         Task<Boolean> CheckSolvedTicket(int ticketId);
     }
