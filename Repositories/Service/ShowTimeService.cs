@@ -24,5 +24,7 @@ namespace Services.Service
             return await _unitOfWork.ShowTimeRepository.GetShowtimesByMovieId(movieId);
         }
 
+        public async Task<ShowTime?> GetByIdIncludeAsync(int id) => await _unitOfWork.ShowTimeRepository.GetByIdIncludeAsync(id);
+
     }
 }

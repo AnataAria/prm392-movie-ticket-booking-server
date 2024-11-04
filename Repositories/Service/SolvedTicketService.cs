@@ -20,7 +20,7 @@ namespace Services.Service
 
         public async Task<PurchaseTicketResponseDto> PurchaseTickets(int showtimeId, List<int> seatIds, Account account)
         {
-            var showtime = await _unitOfWork.ShowTimeRepository.GetByIdAsync(showtimeId)
+            var showtime = await _unitOfWork.ShowTimeRepository.GetByIdIncludeAsync(showtimeId)
                 ?? throw new Exception("Showtime not found");
             double totalTicketPrice = showtime.Tickets
                 .Where(t => seatIds.Contains(t.SeatID) && t.Quantity > 0)

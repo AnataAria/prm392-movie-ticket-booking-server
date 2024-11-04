@@ -24,5 +24,13 @@ namespace DataAccessLayers
                 })
                 .ToListAsync();
         }
+
+        public async Task<ShowTime?> GetByIdIncludeAsync(int id)
+        {
+            var showTime = await _context.ShowTimes
+                .Include(t => t.Tickets)
+                .FirstOrDefaultAsync(t => t.Id == id);
+            return showTime;
+        }
     }
 }
