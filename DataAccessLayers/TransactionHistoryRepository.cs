@@ -37,7 +37,7 @@ namespace DataAccessLayers
                     MovieName = t.MovieName,
                     TicketQuantity = t.TicketQuantity,
                     TotalPrice = t.TotalPrice,
-                    Time = t.Time.HasValue ? t.Time.Value.ToString() : string.Empty,
+                    Time = t.Time is DateTime dateTime ? dateTime.ToString("yyyy/MM/dd HH:mm:ss") : string.Empty,
                     Status = t.Status,
                     TransactionType = t.TransactionType
                 })
