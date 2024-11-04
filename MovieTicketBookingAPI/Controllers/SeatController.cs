@@ -1,4 +1,5 @@
-﻿using BusinessObjects.Dtos.Schema_Response;
+﻿using BusinessObjects;
+using BusinessObjects.Dtos.Schema_Response;
 using BusinessObjects.Dtos.Seat;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interface;
@@ -53,5 +54,10 @@ namespace MovieTicketBookingAPI.Controllers
             }
         }
 
+        [HttpGet("GetSeats")]
+        public async Task<ActionResult<ResponseModel<IEnumerable<Seat>>>> GetAll()
+        {
+            return Ok(await _seatService.GetAll());
+        }
     }
 }
