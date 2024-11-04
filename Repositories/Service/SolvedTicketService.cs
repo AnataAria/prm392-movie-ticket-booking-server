@@ -49,24 +49,50 @@ namespace Services.Service
                     Quantity = 1,
                     TotalPrice = (int)ticket.Price
                 });
-                transactions.Add(new Transaction
-                {
-                    MovieID = showtime.MovieID,
-                    SolvedTicketId = solvedTickets.Last().Id,
-                    TypeId = 1,
-                    Status = "Completed"
-                });
-                transactionHistories.Add(new TransactionHistory
-                {
-                    TransactionId = transactions.Last().Id,
-                    Price = (int)totalTicketPrice,
-                    Time = DateOnly.FromDateTime(DateTime.Now),
-                    Status = "Completed"
-                });
+                //transactions.Add(new Transaction
+                //{
+                //    MovieID = showtime.MovieID,
+                //    SolvedTicketId = solvedTickets.Last().Id,
+                //    TypeId = 1,
+                //    Status = "Completed"
+                //});
+                //transactionHistories.Add(new TransactionHistory
+                //{
+                //    TransactionId = transactions.Last().Id,
+                //    Price = (int)totalTicketPrice,
+                //    Time = DateOnly.FromDateTime(DateTime.Now),
+                //    Status = "Completed"
+                //});
             }
 
             await _unitOfWork.SolvedTicketRepository.AddRangeAsync(solvedTickets);
+            await _unitOfWork.SaveChangesAsync();
+
+            foreach (var solvedTicket in solvedTickets)
+            {
+                var transaction = new Transaction
+                {
+                    MovieID = showtime.MovieID,
+                    SolvedTicketId = solvedTicket.Id,
+                    TypeId = 1,
+                    Status = "Completed"
+                };
+                transactions.Add(transaction);
+            }
             await _unitOfWork.TransactionRepository.AddRangeAsync(transactions);
+            await _unitOfWork.SaveChangesAsync();
+
+            foreach (var transaction in transactions)
+            {
+                var transactionHistory = new TransactionHistory
+                {
+                    TransactionId = transaction.Id,
+                    Price = (int)totalTicketPrice,
+                    Time = DateOnly.FromDateTime(DateTime.Now),
+                    Status = "Completed"
+                };
+                transactionHistories.Add(transactionHistory);
+            }
             await _unitOfWork.TransactionHistoryRepository.AddRangeAsync(transactionHistories);
             await _unitOfWork.SaveChangesAsync();
 
