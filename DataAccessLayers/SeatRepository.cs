@@ -22,7 +22,7 @@ namespace DataAccessLayers
                 return null;
 
             var bookedSeats = await _context.Tickets
-                .Where(ticket => ticket.ShowtimeID == showtimeId && ticket.MovieID == movieId)
+                .Where(ticket => ticket.ShowtimeID == showtimeId && ticket.MovieID == movieId && ticket.Quantity > 0 && ticket.Status != 0)
                 .Select(ticket => ticket.SeatID)
                 .ToListAsync();
 
