@@ -29,6 +29,7 @@ namespace DataAccessLayers
         {
             var showTime = await _context.ShowTimes
                 .Include(t => t.Tickets)
+                .Include(t => t.Movie)
                 .FirstOrDefaultAsync(t => t.Id == id);
             return showTime;
         }

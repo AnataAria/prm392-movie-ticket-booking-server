@@ -27,7 +27,7 @@ namespace DataAccessLayers
                 .ToListAsync();
 
             var availableSeats = showtime.CinemaRoom.Seats
-                .Where(seat => bookedSeats.Contains(seat.Id))
+                .Where(seat => bookedSeats.Contains(seat.Id) && showtime.Tickets.Any(t => t.SeatID == seat.Id && t.Quantity > 0 && t.Status != 0))
                 .Select(seat => new SeatDto
                 {
                     Id = seat.Id,
