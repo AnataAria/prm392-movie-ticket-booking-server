@@ -8,6 +8,7 @@ namespace BusinessObjects.Dtos.TransactionHistory
 {
     public class TransactionHistoryDto
     {
+        public int Id { get; set; }
         public string MovieName { get; set; } = string.Empty;
         public string? ShowDateTime {  get; set; } = string.Empty;
         public string? Room { get; set; } = string.Empty;

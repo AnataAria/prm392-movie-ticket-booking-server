@@ -47,6 +47,7 @@ namespace DataAccessLayers
                     Status = t.Status,
                     TransactionType = t.TransactionType
                 })
+                .OrderByDescending(t => DateTime.TryParse(t.Time, out var parsedTime) ? parsedTime : DateTime.MinValue)
                 .ToList();
 
             return formattedTransactionHistories;
