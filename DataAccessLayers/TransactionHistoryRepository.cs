@@ -25,7 +25,7 @@ namespace DataAccessLayers
                     MovieName = t.SolvedTicket.Ticket.Movie.Name,
                     TicketQuantity = t.SolvedTicket.Quantity,
                     TotalPrice = t.SolvedTicket.TotalPrice,
-                    Time = t.TransactionHistories.FirstOrDefault().Time,
+                    //Time = t.TransactionHistories.FirstOrDefault().Time,
                     Status = t.Status,
                     TransactionType = t.Type.Name
                 })
@@ -37,7 +37,7 @@ namespace DataAccessLayers
                     MovieName = t.MovieName,
                     TicketQuantity = t.TicketQuantity,
                     TotalPrice = t.TotalPrice,
-                    Time = t.Time.HasValue ? t.Time.Value.ToString("yyyy/MM/dd HH:mm:ss") : string.Empty,
+                    //Time = t.Time.HasValue ? t.Time.Value.ToString("yyyy/MM/dd HH:mm:ss") : string.Empty,
                     Status = t.Status,
                     TransactionType = t.TransactionType
                 })
