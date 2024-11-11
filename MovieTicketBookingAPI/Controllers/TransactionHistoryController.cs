@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace MovieTicketBookingAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("user/api/2024-11-11/transactionhistories")]
     [ApiController]
     public class TransactionHistoryController(ITransactionHistoryService transactionHistoryService, IAuthService authService) : ControllerBase
     {
@@ -69,7 +69,7 @@ namespace MovieTicketBookingAPI.Controllers
         //    return Ok(transactionHistory);
         //}
 
-        [HttpGet("ListAll/account")]
+        [HttpGet("list/account")]
         [Authorize]
         public async Task<ActionResult<ResponseModel<IEnumerable<TransactionHistoryDto>>>> GetAllTransactionHistoryByAccountId()
         {

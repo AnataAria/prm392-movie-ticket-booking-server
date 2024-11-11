@@ -2,11 +2,11 @@
 
 namespace MovieTicketBookingAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("user/api/2024-11-11/pings")]
     [ApiController]
     public class PingController : ControllerBase
     {
-        [HttpGet("CheckServer")]
+        [HttpGet("server")]
         public IActionResult GetPingInfo() => Ok(new {
             message = "PING"
         });

@@ -7,12 +7,12 @@ using Services.Service;
 namespace MovieTicketBookingAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("user/api/2024-11-11/showtimes")]
     public class ShowTimeController(IShowTimeService showTimeService) : ControllerBase
     {
         private readonly IShowTimeService _showTimeService = showTimeService;
 
-        [HttpGet("GetShowtimesByMovieId/{movieId}")]
+        [HttpGet("movieid/{movieId}")]
         public async Task<ActionResult<ResponseModel<List<ShowtimeDto>>>> GetShowtimesByMovieId(int movieId)
         {
             var response = new ResponseModel<List<ShowtimeDto>>();

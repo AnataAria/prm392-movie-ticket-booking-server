@@ -6,7 +6,7 @@ using Services.Service;
 
 namespace MovieTicketBookingAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("user/api/2024-11-11/categories")]
     [ApiController]
     public class CategoryController(ICategoryService categoryService) : ControllerBase
     {
@@ -140,7 +140,7 @@ namespace MovieTicketBookingAPI.Controllers
             });
         }
 
-        [HttpGet("GetCategoryByName/{name}")]
+        [HttpGet("category/{name}")]
         public async Task<ActionResult<ResponseModel<Category>>> GetCategoryByName(string name)
         {
             try

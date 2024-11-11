@@ -9,7 +9,7 @@ using System.Net.Sockets;
 
 namespace MovieTicketBookingAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("user/api/2024-11-11/tickets")]
     [ApiController]
     public class TicketController(ITicketService ticketService) : ControllerBase
     {
@@ -53,7 +53,7 @@ namespace MovieTicketBookingAPI.Controllers
             }
         }
 
-        [HttpGet("GetTicketsByMovieId/{movieId}")]
+        [HttpGet("movieid/{movieId}")]
         public async Task<ActionResult<ResponseModel<IEnumerable<TicketDto>>>> GetTicketsByMovieId(int movieId)
         {
             try
@@ -148,7 +148,7 @@ namespace MovieTicketBookingAPI.Controllers
             return CreatedAtAction(nameof(AddTicket), new { id = result.Id }, result);
         }
 
-        [HttpPut("UpdateNewTicket/{id}")]
+        [HttpPut("ticket/{id}")]
         [Tags("CRUD Server Only")]
         public async Task<IActionResult> UpdateNewTicket(int id, [FromBody] Ticket ticket)
         {

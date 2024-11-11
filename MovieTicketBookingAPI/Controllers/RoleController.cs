@@ -7,7 +7,7 @@ using Services.Service;
 
 namespace MovieTicketBookingAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("user/api/2024-11-11/roles")]
     [ApiController]
     public class RoleController(IRoleService roleService) : ControllerBase
     {

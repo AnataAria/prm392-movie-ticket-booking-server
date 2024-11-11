@@ -7,7 +7,7 @@ using System.Net.Sockets;
 
 namespace MovieTicketBookingAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("user/api/2024-11-11/transactiontypes")]
     [ApiController]
     public class TransactionTypeController(ITransactionTypeService transactionTypeService) : ControllerBase
     {

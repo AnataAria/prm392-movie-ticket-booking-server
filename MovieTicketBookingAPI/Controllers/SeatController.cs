@@ -8,13 +8,13 @@ using Services.Service;
 namespace MovieTicketBookingAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("user/api/2024-11-11/seats")]
     public class SeatController(ISeatService seatService) : ControllerBase
     {
         private readonly ISeatService _seatService = seatService;
 
 
-        [HttpGet("GetAvailableSeatsByShowtimeId/{showtimeId}/movieId/{movieId}")]
+        [HttpGet("showtimeid/{showtimeId}/movieid/{movieId}")]
         public async Task<ActionResult<ResponseModel<IEnumerable<SeatDto>>>> GetAvailableSeatsByShowtimeId(int showtimeId, int movieId)
         {
             if (showtimeId <= 0 || movieId <= 0)
@@ -54,7 +54,7 @@ namespace MovieTicketBookingAPI.Controllers
             }
         }
 
-        [HttpGet("GetSeats")]
+        [HttpGet]
         public async Task<ActionResult<ResponseModel<IEnumerable<Seat>>>> GetAll()
         {
             return Ok(await _seatService.GetAll());

@@ -10,7 +10,7 @@ using System.Net;
 
 namespace MovieTicketBookingAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("user/api/2024-11-11/accounts")]
     [ApiController]
     public class AccountController(IAccountService accountService, IAuthService authService) : ControllerBase
     {
@@ -156,7 +156,7 @@ namespace MovieTicketBookingAPI.Controllers
             }
         }
 
-        [HttpPut("UpdateUser/{id}")]
+        [HttpPut("profile/{id}")]
         [Authorize]
         public async Task<ActionResult<ResponseModel<UserDto>>> UpdateUser([FromBody] UserDto account)
         {
@@ -192,7 +192,7 @@ namespace MovieTicketBookingAPI.Controllers
             }
         }
 
-        [HttpPut("UpdateWallet")]
+        [HttpPut("wallet")]
         [Authorize]
         public async Task<ActionResult<ResponseModel<UserUpdateWalletDto>>> UpdateWallet([FromQuery] double wallet)
         {
@@ -268,7 +268,7 @@ namespace MovieTicketBookingAPI.Controllers
         //    return NoContent();
         //}
 
-        [HttpPost("ValidateUser")]
+        [HttpPost("validation")]
         public async Task<ActionResult<ResponseModel<AccountResponseBasic>>> GetSystemAccountByEmailAndPassword([FromQuery] string email, [FromQuery] string password)
         {
             try

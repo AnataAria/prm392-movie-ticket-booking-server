@@ -9,7 +9,7 @@ using Services.Service;
 
 namespace MovieTicketBookingAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/2024-11-11/promotions")]
     [ApiController]
     public class PromotionController(IPromotionService promotionService) : ControllerBase
     {

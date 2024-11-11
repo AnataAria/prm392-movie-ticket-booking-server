@@ -9,7 +9,7 @@ using System;
 
 namespace MovieTicketBookingAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("user/api/2024-11-11/solvedtickets")]
     [ApiController]
     public class SolvedTicketController(ISolvedTicketService solvedTicketService, IAuthService authService) : ControllerBase
     {
@@ -65,7 +65,7 @@ namespace MovieTicketBookingAPI.Controllers
             return NoContent();
         }
 
-        [HttpPost("PurchaseTickets")]
+        [HttpPost("tickets")]
         [Authorize]
         public async Task<ActionResult<ResponseModel<PurchaseTicketResponseDto>>> PurchaseTickets([FromBody] PurchaseTicketRequestDto request)
         {
@@ -150,7 +150,7 @@ namespace MovieTicketBookingAPI.Controllers
             }
         }
 
-        [HttpGet("Account/{accountId}")]
+        [HttpGet("account/{accountId}")]
         [Tags("CRUD Server Only")]
         public async Task<IActionResult> GetSolvedTicketsByAccountId(int accountId)
         {
@@ -158,7 +158,7 @@ namespace MovieTicketBookingAPI.Controllers
             return Ok(solvedTickets);
         }
 
-        [HttpGet("Check/{ticketId}")]
+        [HttpGet("check/{ticketId}")]
         [Tags("CRUD Server Only")]
         public async Task<IActionResult> CheckSolvedTicket(int ticketId)
         {
