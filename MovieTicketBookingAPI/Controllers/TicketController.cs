@@ -9,7 +9,7 @@ using System.Net.Sockets;
 
 namespace MovieTicketBookingAPI.Controllers
 {
-    [Route("user/api/2024-11-11/tickets")]
+    [Route("api/2024-11-11/tickets")]
     [ApiController]
     public class TicketController(ITicketService ticketService) : ControllerBase
     {

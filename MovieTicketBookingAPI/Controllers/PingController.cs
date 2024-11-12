@@ -2,7 +2,7 @@
 
 namespace MovieTicketBookingAPI.Controllers
 {
-    [Route("user/api/2024-11-11/pings")]
+    [Route("api/2024-11-11/pings")]
     [ApiController]
     public class PingController : ControllerBase
     {

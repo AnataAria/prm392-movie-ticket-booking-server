@@ -8,7 +8,7 @@ using Services.Service;
 namespace MovieTicketBookingAPI.Controllers
 {
     [ApiController]
-    [Route("user/api/2024-11-11/seats")]
+    [Route("api/2024-11-11/seats")]
     public class SeatController(ISeatService seatService) : ControllerBase
     {
         private readonly ISeatService _seatService = seatService;

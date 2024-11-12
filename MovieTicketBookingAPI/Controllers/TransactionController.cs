@@ -5,7 +5,7 @@ using Services.Service;
 
 namespace MovieTicketBookingAPI.Controllers
 {
-    [Route("user/api/2024-11-11/transactions")]
+    [Route("api/2024-11-11/transactions")]
     [ApiController]
     public class TransactionController(ITransactionService transactionService) : ControllerBase
     {

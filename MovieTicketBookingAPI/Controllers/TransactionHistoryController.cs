@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace MovieTicketBookingAPI.Controllers
 {
-    [Route("user/api/2024-11-11/transactionhistories")]
+    [Route("api/2024-11-11/transactionhistories")]
     [ApiController]
     public class TransactionHistoryController(ITransactionHistoryService transactionHistoryService, IAuthService authService) : ControllerBase
     {

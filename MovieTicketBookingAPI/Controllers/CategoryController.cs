@@ -6,7 +6,7 @@ using Services.Service;
 
 namespace MovieTicketBookingAPI.Controllers
 {
-    [Route("user/api/2024-11-11/categories")]
+    [Route("api/2024-11-11/categories")]
     [ApiController]
     public class CategoryController(ICategoryService categoryService) : ControllerBase
     {

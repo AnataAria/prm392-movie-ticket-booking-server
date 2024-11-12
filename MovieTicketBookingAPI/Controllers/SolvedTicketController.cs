@@ -9,7 +9,7 @@ using System;
 
 namespace MovieTicketBookingAPI.Controllers
 {
-    [Route("user/api/2024-11-11/solvedtickets")]
+    [Route("api/2024-11-11/solvedtickets")]
     [ApiController]
     public class SolvedTicketController(ISolvedTicketService solvedTicketService, IAuthService authService) : ControllerBase
     {

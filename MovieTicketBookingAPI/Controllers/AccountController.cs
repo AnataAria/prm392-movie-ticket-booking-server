@@ -10,7 +10,7 @@ using System.Net;
 
 namespace MovieTicketBookingAPI.Controllers
 {
-    [Route("user/api/2024-11-11/accounts")]
+    [Route("api/2024-11-11/accounts")]
     [ApiController]
     public class AccountController(IAccountService accountService, IAuthService authService) : ControllerBase
     {

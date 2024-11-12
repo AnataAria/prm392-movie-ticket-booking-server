@@ -8,7 +8,7 @@ using BusinessObjects.Dtos.Schema_Response;
 
 namespace MovieTicketBookingAPI.Controllers
 {
-    [Route("user/api/2024-11-11/auth")]
+    [Route("api/2024-11-11/auth")]
     [ApiController]
     public class AuthController(IAuthService authService) : ControllerBase
     {

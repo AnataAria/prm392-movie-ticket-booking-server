@@ -7,7 +7,7 @@ using Services.Service;
 namespace MovieTicketBookingAPI.Controllers
 {
     [ApiController]
-    [Route("user/api/2024-11-11/showtimes")]
+    [Route("api/2024-11-11/showtimes")]
     public class ShowTimeController(IShowTimeService showTimeService) : ControllerBase
     {
         private readonly IShowTimeService _showTimeService = showTimeService;
