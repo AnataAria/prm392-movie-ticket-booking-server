@@ -170,15 +170,15 @@ namespace MovieTicketBookingAPI.Controllers
                 if (existingAccount == null)
                     return NotFound(new ResponseModel<UserDto> { Success = false, Error = "Account not found", ErrorCode = 404 });
 
-                if (existingAccount.Name != account.Name)
+                if (account.Name != "" && existingAccount.Name != account.Name)
                 {
                     existingAccount.Name = account.Name;
                 }
-                if (existingAccount.Address != account.Address)
+                if (account.Address != "" && existingAccount.Address != account.Address)
                 {
                     existingAccount.Address = account.Address;
                 }
-                if (existingAccount.Phone != account.Phone)
+                if (account.Phone != "" &&  existingAccount.Phone != account.Phone)
                 {
                     existingAccount.Phone = account.Phone;
                 }
